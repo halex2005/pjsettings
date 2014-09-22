@@ -1,5 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
+include_directories(.)
+
 add_library(pjsettings-json
     pjsettings-jsoncpp.h
     pjsettings-jsoncpp.cpp
