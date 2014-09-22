@@ -7,3 +7,16 @@ add_executable(test-pjsettings-contrib
     pjsettings-jsoncpp.tests.cpp
     pjsettings-pugixml.tests.cpp
 )
+target_link_libraries(test-pjsettings-contrib pjsettings-pugixml)
+if (UNIX)
+    add_definitions(-std=c++11)
+    add_definitions(-fpermissive)
+
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(PJSIP libpjproject REQUIRED)
+    if (NOT PJSIP_FOUND)
+        message(SEND_ERROR "PJSIP libraries not found")
+        return()
+    endif()
+    target_link_libraries(test-pjsettings-contrib ${PJSIP_LIBRARIES})
+endif()
