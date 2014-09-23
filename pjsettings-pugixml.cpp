@@ -111,6 +111,12 @@ namespace pjsettings
         return _rootNode;
     }
 
+    void selectNextArrayElement(const ContainerNode *node, const pugi::xml_node &arrayIterator)
+    {
+        pugi::xml_node nextSibling = arrayIterator.next_sibling();
+        const_cast<ContainerNode*>(node)->data.data2 = nextSibling.internal_object();
+    }
+
     static bool          pugixmlNode_hasUnread(const ContainerNode *node)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
@@ -145,22 +151,52 @@ namespace pjsettings
     static float         pugixmlNode_readNumber(const ContainerNode *node, const string &name) throw(Error)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        pugi::xml_node element(data);
-        return element.attribute(name.c_str()).as_double(0.0);
+        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+        if (arrayData != NULL)
+        {
+            pugi::xml_node arrayIterator(arrayData);
+            selectNextArrayElement(node, arrayIterator);
+            return arrayIterator.text().as_double(0.0);
+        }
+        else
+        {
+            pugi::xml_node element(data);
+            return element.attribute(name.c_str()).as_double(0.0);
+        }
     }
 
     static bool          pugixmlNode_readBool(const ContainerNode *node, const string &name) throw(Error)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        pugi::xml_node element(data);
-        return element.attribute(name.c_str()).as_bool(false);
+        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+        if (arrayData != NULL)
+        {
+            pugi::xml_node arrayIterator(arrayData);
+            selectNextArrayElement(node, arrayIterator);
+            return arrayIterator.text().as_bool(false);
+        }
+        else
+        {
+            pugi::xml_node element(data);
+            return element.attribute(name.c_str()).as_bool(false);
+        }
     }
 
     static string        pugixmlNode_readString(const ContainerNode *node, const string &name) throw(Error)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        pugi::xml_node element(data);
-        return element.attribute(name.c_str()).as_string("");
+        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+        if (arrayData != NULL)
+        {
+            pugi::xml_node arrayIterator(arrayData);
+            selectNextArrayElement(node, arrayIterator);
+            return arrayIterator.text().as_string("");
+        }
+        else
+        {
+            pugi::xml_node element(data);
+            return element.attribute(name.c_str()).as_string("");
+        }
     }
 
     static StringVector  pugixmlNode_readStringVector(const ContainerNode *node, const string &name) throw(Error)
@@ -172,9 +208,7 @@ namespace pjsettings
         {
             pugi::xml_node arrayIterator(arrayData);
             stringVectorNode = arrayIterator;
-
-            pugi::xml_node nextSibling = arrayIterator.next_sibling();
-            const_cast<ContainerNode*>(node)->data.data2 = nextSibling.internal_object();
+            selectNextArrayElement(node, arrayIterator);
         }
         else
         {
@@ -203,8 +237,7 @@ namespace pjsettings
             childNode.data.doc = node->data.doc;
             childNode.data.data1 = arrayIterator.internal_object();
 
-            pugi::xml_node nextSibling = arrayIterator.next_sibling();
-            const_cast<ContainerNode*>(node)->data.data2 = nextSibling.internal_object();
+            selectNextArrayElement(node, arrayIterator);
             return childNode;
         }
         else
@@ -222,13 +255,23 @@ namespace pjsettings
     static ContainerNode pugixmlNode_readArray(const ContainerNode *node, const string &name) throw(Error)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        pugi::xml_node element(data);
-        pugi::xml_node child = element.child(name.c_str());
-        pugi::xml_node firstArrayChild = child.first_child();
+        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+        pugi::xml_node workNode;
+        if (arrayData != NULL)
+        {
+            workNode = pugi::xml_node(arrayData);
+            selectNextArrayElement(node, workNode);
+        }
+        else
+        {
+            pugi::xml_node element(data);
+            workNode = element.child(name.c_str());
+        }
+        pugi::xml_node firstArrayChild = workNode.first_child();
         ContainerNode childNode = {};
         childNode.op = &pugixml_op;
         childNode.data.doc = node->data.doc;
-        childNode.data.data1 = child.internal_object();
+        childNode.data.data1 = workNode.internal_object();
         childNode.data.data2 = firstArrayChild.internal_object();
         return childNode;
     }

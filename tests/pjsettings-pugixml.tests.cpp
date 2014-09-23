@@ -51,6 +51,20 @@ SCENARIO("pugixml from string")
 <simpleContainer>\
   <simpleClass intValue=\"18\" />\
 </simpleContainer>\
+<intArray>\
+  <add>19</add>\
+  <add>20</add>\
+</intArray>\
+<arrayOfStringVectors>\
+  <vector>\
+    <add>first</add>\
+    <add>second</add>\
+  </vector>\
+  <vector>\
+    <add>third</add>\
+    <add>fourth</add>\
+  </vector>\
+</arrayOfStringVectors>\
 </root>";
     PjPugixmlDocument doc;
     doc.loadString(xmlString);
@@ -115,7 +129,7 @@ SCENARIO("pugixml from string")
         CHECK(simpleClass.stringValue == "string");
     }
 
-    SECTION("read array")
+    SECTION("read array of objects")
     {
         ContainerNode arrayNode = doc.readArray("simpleClassArray");
         std::vector<SimpleClass> data;
@@ -131,6 +145,55 @@ SCENARIO("pugixml from string")
 
         //TODO: test read string vector from array
         //TODO: test read simple data from array
+    }
+
+    SECTION("read int array")
+    {
+        ContainerNode arrayNode = doc.readArray("intArray");
+        std::vector<int> data;
+        while (arrayNode.hasUnread())
+        {
+            data.push_back(arrayNode.readInt());
+        }
+        REQUIRE(2 == data.size());
+        CHECK(data[0] == 19);
+        CHECK(data[1] == 20);
+    }
+
+    SECTION("read StringVector array")
+    {
+        ContainerNode arrayNode = doc.readArray("arrayOfStringVectors");
+        std::vector<StringVector> data;
+        while (arrayNode.hasUnread())
+        {
+            data.push_back(arrayNode.readStringVector());
+        }
+        REQUIRE(2 == data.size());
+        CHECK(data[0].size() == 2);
+        CHECK(data[0][0] == "first");
+        CHECK(data[0][1] == "second");
+        CHECK(data[1].size() == 2);
+        CHECK(data[1][0] == "third");
+        CHECK(data[1][1] == "fourth");
+    }
+
+    SECTION("read array in array")
+    {
+        ContainerNode arrayNode = doc.readArray("arrayOfStringVectors");
+        std::vector<std::string> data;
+        while (arrayNode.hasUnread())
+        {
+            ContainerNode subNode = arrayNode.readArray("vector");
+            while (subNode.hasUnread())
+            {
+                data.push_back(subNode.readString("add"));
+            }
+        }
+        REQUIRE(4 == data.size());
+        CHECK(data[0] == "first");
+        CHECK(data[1] == "second");
+        CHECK(data[2] == "third");
+        CHECK(data[3] == "fourth");
     }
 
     SECTION("read container")
