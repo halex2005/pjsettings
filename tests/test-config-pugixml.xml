@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <LogConfig
+        filename="pjsip.log"
+        level="5"
+        consoleLevel="4"
+        >
+    </LogConfig>
+</root>

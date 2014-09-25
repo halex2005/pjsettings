@@ -21,3 +21,11 @@ if (UNIX)
     endif()
     target_link_libraries(test-pjsettings-contrib ${PJSIP_LIBRARIES})
 endif()
+
+add_custom_command(
+    TARGET test-pjsettings-contrib PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/test-config-pugixml.xml $<TARGET_FILE_DIR:test-pjsettings-contrib>)
+
+add_custom_command(
+    TARGET test-pjsettings-contrib PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/test-config-jsoncpp.json $<TARGET_FILE_DIR:test-pjsettings-contrib>)

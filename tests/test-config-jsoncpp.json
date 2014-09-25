@@ -1,0 +1,7 @@
+{
+    "LogConfig": {
+        "filename": "pjsip.log",
+        "level": 5,
+        "consoleLevel": 4,
+    }
+}
