@@ -7,6 +7,8 @@ add_executable(test-pjsettings-contrib
     pjsettings-jsoncpp.tests.cpp
     pjsettings-pugixml.tests.cpp
     SimpleClass.h
+    test-config-jsoncpp.json
+    test-config-pugixml.xml
 )
 target_link_libraries(test-pjsettings-contrib pjsettings-pugixml)
 if (UNIX)

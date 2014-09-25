@@ -230,5 +230,15 @@ SCENARIO("pugixml read pjsip LogConfig")
 
 SCENARIO("pugixml from file")
 {
+    const char *filename = "test-config-pugixml.xml";
 
+    PjPugixmlDocument doc;
+    doc.loadFile(filename);
+
+    LogConfig config;
+    doc.readObject(config);
+
+    CHECK(5 == config.level);
+    CHECK(4 == config.consoleLevel);
+    CHECK("pjsip.log" == config.filename);
 }
