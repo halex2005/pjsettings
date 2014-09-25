@@ -3,7 +3,7 @@ compiler:
   - clang
   - gcc
 install:
-  - sudo apt-get install pjproject
+  - sudo apt-get install pjsip
   - sudo apt-get install pkg-config
 script: cmake && make
 os:
