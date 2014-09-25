@@ -44,7 +44,7 @@ or you can have just small part of fields, and can reorder them on your own:
 Third-party libraries
 ---------------------
 
-This library use this great libraries (in alphabetical order):
+This library use great libraries to work well (in alphabetical order):
 
 - [catch](https://github.com/philsquared/Catch) by Two Blue Cubes Ltd. for unit testing
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp) by Baptiste Lepilleur for json backend
