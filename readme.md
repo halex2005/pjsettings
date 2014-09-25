@@ -1,6 +1,8 @@
 PJSettings
 ==========
 
+[![Build Status](https://travis-ci.org/halex2005/pjsettings.svg?branch=master)](https://travis-ci.org/halex2005/pjsettings)
+
 PJSettings is small library that extends a PJSIP persistent document interfaces to support:
 
 - read/write xml document non-serially, based on [pugixml backend](http://pugixml.org/)
