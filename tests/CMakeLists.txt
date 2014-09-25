@@ -10,7 +10,7 @@ add_executable(test-pjsettings-contrib
     test-config-jsoncpp.json
     test-config-pugixml.xml
 )
-target_link_libraries(test-pjsettings-contrib pjsettings-pugixml)
+target_link_libraries(test-pjsettings-contrib pjsettings)
 if (UNIX)
     add_definitions(-std=c++11)
     add_definitions(-fpermissive)
