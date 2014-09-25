@@ -1,38 +1,10 @@
 #include <catch/catch.hpp>
 #include <pjsettings-pugixml.h>
 #include <pjsua2/endpoint.hpp>
+#include "SimpleClass.h"
 
 using namespace pj;
 using namespace pjsettings;
-
-class SimpleClass : public pj::PersistentObject
-{
-public:
-    SimpleClass(const std::string &elementName)
-        : _elementName(elementName)
-    {
-    }
-
-    virtual void readObject(const pj::ContainerNode &node) throw(pj::Error)
-    {
-        pj::ContainerNode this_node = node.readContainer(_elementName.c_str());
-        NODE_READ_INT(this_node, intValue);
-        NODE_READ_STRING(this_node, stringValue);
-    }
-
-
-    virtual void writeObject(pj::ContainerNode &node) const throw(pj::Error)
-    {
-        pj::ContainerNode this_node = node.readContainer(_elementName.c_str());
-        NODE_WRITE_INT(this_node, intValue);
-        NODE_WRITE_STRING(this_node, stringValue);
-    }
-
-    int intValue;
-    std::string stringValue;
-private:
-    std::string _elementName;
-};
 
 SCENARIO("pugixml from string")
 {
@@ -203,5 +175,60 @@ SCENARIO("pugixml from string")
         node.readObject(simpleClass);
         CHECK(simpleClass.intValue == 18);
     }
+}
+
+SCENARIO("pugixml read pjsip LogConfig")
+{
+    SECTION("read ordered config values")
+    {
+        const char *xmlString = ""
+            "<root>\n"
+            "    <LogConfig msgLogging=\"1\"\n"
+            "        level=\"5\"\n"
+            "        consoleLevel=\"4\"\n"
+            "        decor=\"25328\"\n"
+            "        filename=\"pjsip.log\"\n"
+            "        fileFlags=\"0\"\n"
+            "        >"
+            "    </LogConfig>"
+            "</root>,\n"
+            "}";
+        PjPugixmlDocument doc;
+        doc.loadString(xmlString);
+
+        LogConfig config;
+        doc.readObject(config);
+
+        CHECK(1 == config.msgLogging);
+        CHECK(5 == config.level);
+        CHECK(4 == config.consoleLevel);
+        CHECK("pjsip.log" == config.filename);
+    }
+
+    SECTION("read unordered config values")
+    {
+        const char *xmlString = "<root>\n"
+            "    <LogConfig\n"
+            "        filename=\"pjsip.log\"\n"
+            "        level=\"5\"\n"
+            "        consoleLevel=\"4\"\n"
+            "        >"
+            "    </LogConfig>\n"
+            "</root>";
+
+        PjPugixmlDocument doc;
+        doc.loadString(xmlString);
+
+        LogConfig config;
+        doc.readObject(config);
+
+        CHECK(5 == config.level);
+        CHECK(4 == config.consoleLevel);
+        CHECK("pjsip.log" == config.filename);
+    }
+}
+
+SCENARIO("pugixml from file")
+{
 
 }
