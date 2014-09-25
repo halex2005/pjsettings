@@ -152,23 +152,32 @@ namespace pjsettings
 
     static float         jsoncppNode_readNumber(const ContainerNode *node, const string &name) throw(Error)
     {
-        // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
-        // if (arrayData != NULL)
-        // {
-        //     pugi::xml_node arrayIterator(arrayData);
-        //     selectNextArrayElement(node, arrayIterator);
-        //     return arrayIterator.text().as_double(0.0);
-        // }
-        // else
-        // {
-        //     pugi::xml_node element(data);
-        //     return element.attribute(name.c_str()).as_double(0.0);
-        // }
+        Json::Value defaultValue(0);
+        Json::Value *data = static_cast<Json::Value *>(node->data.data1);
+        if (data != NULL)
+        {
+            Json::Value element = data->get(name, defaultValue);
+            return element.asDouble();
+        }
+//        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+//        if (arrayData != NULL)
+//        {
+//             pugi::xml_node arrayIterator(arrayData);
+//             selectNextArrayElement(node, arrayIterator);
+//             return arrayIterator.text().as_double(0.0);
+//        }
+//        else
     }
 
     static bool          jsoncppNode_readBool(const ContainerNode *node, const string &name) throw(Error)
     {
+        Json::Value defaultValue(false);
+        Json::Value *data = static_cast<Json::Value *>(node->data.data1);
+        if (data != NULL)
+        {
+            Json::Value element = data->get(name, defaultValue);
+            return element.asBool();
+        }
         // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
         // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
         // if (arrayData != NULL)
@@ -186,6 +195,13 @@ namespace pjsettings
 
     static string        jsoncppNode_readString(const ContainerNode *node, const string &name) throw(Error)
     {
+        Json::Value defaultValue("");
+        Json::Value *data = static_cast<Json::Value *>(node->data.data1);
+        if (data != NULL)
+        {
+            Json::Value element = data->get(name, defaultValue);
+            return element.asString();
+        }
         // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
         // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
         // if (arrayData != NULL)
@@ -203,6 +219,19 @@ namespace pjsettings
 
     static StringVector  jsoncppNode_readStringVector(const ContainerNode *node, const string &name) throw(Error)
     {
+        Json::Value defaultValue(arrayValue);
+        Json::Value *data = static_cast<Json::Value *>(node->data.data1);
+        if (data != NULL)
+        {
+            Json::Value element = data->get(name, defaultValue);
+            StringVector result;
+            for (int i = 0; i < element.size(); ++i)
+            {
+                Json::Value item = element[i];
+                result.push_back(item.asCString());
+            }
+            return result;
+        }
         // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
         // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
         // pugi::xml_node stringVectorNode;
@@ -218,13 +247,6 @@ namespace pjsettings
         //     stringVectorNode = element.child(name.c_str());
         // }
 
-        // StringVector result;
-        // for (pugi::xml_node item = stringVectorNode.first_child(); item; item = item.next_sibling())
-        // {
-        //     const char *stringItem = item.text().as_string("");
-        //     result.push_back(stringItem);
-        // }
-        // return result;
     }
 
     static ContainerNode jsoncppNode_readContainer(const ContainerNode *node, const string &name) throw(Error)
