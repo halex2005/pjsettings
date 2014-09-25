@@ -113,191 +113,185 @@ namespace pjsettings
         return _rootNode;
     }
 
-    void selectNextArrayElement(const ContainerNode *node, const Value &arrayIterator)
+    void selectNextArrayElement(const ContainerNode *node, ptrdiff_t currentIndex)
     {
-        // Value &nextSibling = arrayIterator.;
-        // const_cast<ContainerNode*>(node)->data.data2 = nextSibling.internal_object();
+        const_cast<ContainerNode*>(node)->data.data2 = reinterpret_cast<void*>(++currentIndex);
+    }
+
+    static Json::Value &get_value(const ContainerNode *node)
+    {
+        Json::Value *data = static_cast<Json::Value *>(node->data.data1);
+        if (data == NULL)
+        {
+            throw pj::Error(1, "get_value error", "parent node data is null", "", 0);
+        }
+        return *data;
+    }
+
+    static ArrayIndex get_array_index(const ContainerNode *node)
+    {
+        return static_cast<ArrayIndex>(reinterpret_cast<size_t>(node->data.data2));
+    }
+
+    static Json::Value &get_array_value(Json::Value &data, ArrayIndex arrayIndex)
+    {
+        if (!data.isValidIndex(arrayIndex - 1))
+        {
+            throw pj::Error(1, "read container error", "no more container items in array", "", arrayIndex);
+        }
+        return data[arrayIndex - 1];
     }
 
     static bool          jsoncppNode_hasUnread(const ContainerNode *node)
     {
-        // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
-        // if (arrayData != NULL)
-        // {
-        //     pugi::xml_node arrayIterator(arrayData);
-        //     return !!arrayIterator;
-        // }
-        // else
-        // {
-        //     return false;
-        // }
+        Json::Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        if (arrayIndex > 0)
+        {
+            return data.isValidIndex(arrayIndex - 1);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     static string        jsoncppNode_unreadName(const ContainerNode *node) throw(Error)
     {
-        // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
-        // if (arrayData != NULL)
-        // {
-        //     pugi::xml_node arrayIterator(arrayData);
-        //     return arrayIterator.name();
-        // }
-        // else
-        // {
-        //     pugi::xml_node element(data);
-        //     return element.name();
-        // }
+        // There is no name property for json values
+        return "";
     }
 
     static float         jsoncppNode_readNumber(const ContainerNode *node, const string &name) throw(Error)
     {
-        Json::Value defaultValue(0);
-        Json::Value *data = static_cast<Json::Value *>(node->data.data1);
-        if (data != NULL)
+        Json::Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        if (arrayIndex > 0)
         {
-            Json::Value element = data->get(name, defaultValue);
+            Json::Value &arrayElement = get_array_value(data, arrayIndex);
+            selectNextArrayElement(node, arrayIndex);
+            return arrayElement.asDouble();
+        }
+        else
+        {
+            Json::Value &element = data[name];
             return element.asDouble();
         }
-//        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
-//        if (arrayData != NULL)
-//        {
-//             pugi::xml_node arrayIterator(arrayData);
-//             selectNextArrayElement(node, arrayIterator);
-//             return arrayIterator.text().as_double(0.0);
-//        }
-//        else
     }
 
     static bool          jsoncppNode_readBool(const ContainerNode *node, const string &name) throw(Error)
     {
-        Json::Value defaultValue(false);
-        Json::Value *data = static_cast<Json::Value *>(node->data.data1);
-        if (data != NULL)
+        Json::Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        if (arrayIndex > 0)
         {
-            Json::Value element = data->get(name, defaultValue);
+            Json::Value &arrayElement = get_array_value(data, arrayIndex);
+            selectNextArrayElement(node, arrayIndex);
+            return arrayElement.asBool();
+        }
+        else
+        {
+            Json::Value &element = data[name];
             return element.asBool();
         }
-        // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
-        // if (arrayData != NULL)
-        // {
-        //     pugi::xml_node arrayIterator(arrayData);
-        //     selectNextArrayElement(node, arrayIterator);
-        //     return arrayIterator.text().as_bool(false);
-        // }
-        // else
-        // {
-        //     pugi::xml_node element(data);
-        //     return element.attribute(name.c_str()).as_bool(false);
-        // }
     }
 
     static string        jsoncppNode_readString(const ContainerNode *node, const string &name) throw(Error)
     {
-        Json::Value defaultValue("");
-        Json::Value *data = static_cast<Json::Value *>(node->data.data1);
-        if (data != NULL)
+        Json::Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        if (arrayIndex > 0)
         {
-            Json::Value element = data->get(name, defaultValue);
+            Json::Value &arrayElement = get_array_value(data, arrayIndex);
+            selectNextArrayElement(node, arrayIndex);
+            return arrayElement.asString();
+        }
+        else
+        {
+            Json::Value &element = data[name];
             return element.asString();
         }
-        // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
-        // if (arrayData != NULL)
-        // {
-        //     pugi::xml_node arrayIterator(arrayData);
-        //     selectNextArrayElement(node, arrayIterator);
-        //     return arrayIterator.text().as_string("");
-        // }
-        // else
-        // {
-        //     pugi::xml_node element(data);
-        //     return element.attribute(name.c_str()).as_string("");
-        // }
     }
 
     static StringVector  jsoncppNode_readStringVector(const ContainerNode *node, const string &name) throw(Error)
     {
-        Json::Value defaultValue(arrayValue);
-        Json::Value *data = static_cast<Json::Value *>(node->data.data1);
-        if (data != NULL)
+        Json::Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        Json::Value *stringVectorNode = NULL;
+        if (arrayIndex > 0)
         {
-            Json::Value element = data->get(name, defaultValue);
-            StringVector result;
-            for (int i = 0; i < element.size(); ++i)
-            {
-                Json::Value item = element[i];
-                result.push_back(item.asCString());
-            }
-            return result;
+            stringVectorNode = &get_array_value(data, arrayIndex);
+            selectNextArrayElement(node, arrayIndex);
         }
-        // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
-        // pugi::xml_node stringVectorNode;
-        // if (arrayData != NULL)
-        // {
-        //     pugi::xml_node arrayIterator(arrayData);
-        //     stringVectorNode = arrayIterator;
-        //     selectNextArrayElement(node, arrayIterator);
-        // }
-        // else
-        // {
-        //     pugi::xml_node element(data);
-        //     stringVectorNode = element.child(name.c_str());
-        // }
+        else
+        {
+            stringVectorNode = &data[name];
+        }
 
+        Json::Value &element = *stringVectorNode;
+        StringVector result;
+        for (int i = 0; i < element.size(); ++i)
+        {
+            Json::Value &item = element[i];
+            result.push_back(item.asCString());
+        }
+        return result;
     }
 
     static ContainerNode jsoncppNode_readContainer(const ContainerNode *node, const string &name) throw(Error)
     {
-        // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
-        // if (arrayData != NULL)
-        // {
-        //     pugi::xml_node arrayIterator(arrayData);
-        //     ContainerNode childNode = {};
-        //     childNode.op = &jsoncpp_op;
-        //     childNode.data.doc = node->data.doc;
-        //     childNode.data.data1 = arrayIterator.internal_object();
+        Json::Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        if (arrayIndex > 0)
+        {
+            Json::Value &arrayElement = get_array_value(data, arrayIndex);
 
-        //     selectNextArrayElement(node, arrayIterator);
-        //     return childNode;
-        // }
-        // else
-        // {
-        //     pugi::xml_node element(data);
-        //     pugi::xml_node child = element.child(name.c_str());
-        //     ContainerNode childNode = {};
-        //     childNode.op = &jsoncpp_op;
-        //     childNode.data.doc = node->data.doc;
-        //     childNode.data.data1 = child.internal_object();
-        //     return childNode;
-        // }
+            ContainerNode childNode = {};
+            childNode.op = &jsoncpp_op;
+            childNode.data.doc = node->data.doc;
+            childNode.data.data1 = &arrayElement;
+
+            selectNextArrayElement(node, arrayIndex);
+            return childNode;
+        }
+        else
+        {
+            Json::Value &element = data[name];
+            ContainerNode childNode = {};
+            childNode.op = &jsoncpp_op;
+            childNode.data.doc = node->data.doc;
+            childNode.data.data1 = &element;
+            return childNode;
+        }
     }
 
     static ContainerNode jsoncppNode_readArray(const ContainerNode *node, const string &name) throw(Error)
     {
-        // pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
-        // pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
-        // pugi::xml_node workNode;
-        // if (arrayData != NULL)
-        // {
-        //     workNode = pugi::xml_node(arrayData);
-        //     selectNextArrayElement(node, workNode);
-        // }
-        // else
-        // {
-        //     pugi::xml_node element(data);
-        //     workNode = element.child(name.c_str());
-        // }
-        // pugi::xml_node firstArrayChild = workNode.first_child();
-        // ContainerNode childNode = {};
-        // childNode.op = &jsoncpp_op;
-        // childNode.data.doc = node->data.doc;
-        // childNode.data.data1 = workNode.internal_object();
-        // childNode.data.data2 = firstArrayChild.internal_object();
-        // return childNode;
+        Json::Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        Json::Value *workData = NULL;
+        if (arrayIndex > 0)
+        {
+            Json::Value &arrayElement = get_array_value(data, arrayIndex);
+            workData = &arrayElement;
+            selectNextArrayElement(node, arrayIndex);
+        }
+        else
+        {
+            Json::Value &element = data[name.c_str()];
+            workData = &element;
+        }
+
+        if (!workData || !workData->isArray())
+        {
+            throw pj::Error(1, "read array error", "array expected", name, 0);
+        }
+        ContainerNode childNode = {};
+        childNode.op = &jsoncpp_op;
+        childNode.data.doc = node->data.doc;
+        childNode.data.data1 = workData;
+        childNode.data.data2 = reinterpret_cast<void*>(1);
+        return childNode;
     }
 
     static void          jsoncppNode_writeNumber(ContainerNode *node, const string &name, float num) throw(Error)
