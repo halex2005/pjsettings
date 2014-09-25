@@ -23,6 +23,10 @@ SCENARIO("pugixml from string")
         "       <add>string</add>\n"
         "       <add>other string</add>\n"
         "   </stringsArray>\n"
+        "   <boolArray>"
+        "       <add>true</add>"
+        "       <add>false</add>"
+        "   </boolArray>\n"
         "   <simpleClassArray>\n"
         "       <add intValue=\"16\" />\n"
         "       <add intValue=\"17\" />\n"
@@ -108,79 +112,105 @@ SCENARIO("pugixml from string")
         }
     }
 
+    SECTION("read from array")
+    {
+        SECTION("read array of objects")
+        {
+            ContainerNode arrayNode = doc.readArray("simpleClassArray");
+            std::vector<SimpleClass> data;
+            while (arrayNode.hasUnread())
+            {
+                SimpleClass obj { "simpleClass" };
+                arrayNode.readObject(obj);
+                data.push_back(obj);
+            }
+            REQUIRE(2 == data.size());
+            CHECK(data[0].intValue == 16);
+            CHECK(data[1].intValue == 17);
+        }
+
+        SECTION("read int array")
+        {
+            ContainerNode arrayNode = doc.readArray("intArray");
+            std::vector<int> data;
+            while (arrayNode.hasUnread())
+            {
+                data.push_back(arrayNode.readInt());
+            }
+            REQUIRE(2 == data.size());
+            CHECK(data[0] == 19);
+            CHECK(data[1] == 20);
+        }
+
+        SECTION("read string array")
+        {
+            ContainerNode arrayNode = doc.readArray("stringsArray");
+            std::vector<std::string> data;
+            while (arrayNode.hasUnread())
+            {
+                data.push_back(arrayNode.readString());
+            }
+            REQUIRE(2 == data.size());
+            CHECK("string" == data[0]);
+            CHECK("other string" == data[1]);
+        }
+
+        SECTION("read bool array")
+        {
+            ContainerNode arrayNode = doc.readArray("boolArray");
+            std::vector<bool> data;
+            while (arrayNode.hasUnread())
+            {
+                data.push_back(arrayNode.readBool());
+            }
+            REQUIRE(2 == data.size());
+            CHECK(true == data[0]);
+            CHECK(false == data[1]);
+        }
+
+        SECTION("read StringVector array")
+        {
+            ContainerNode arrayNode = doc.readArray("arrayOfStringVectors");
+            std::vector<StringVector> data;
+            while (arrayNode.hasUnread())
+            {
+                data.push_back(arrayNode.readStringVector());
+            }
+            REQUIRE(2 == data.size());
+            CHECK(data[0].size() == 2);
+            CHECK(data[0][0] == "first");
+            CHECK(data[0][1] == "second");
+            CHECK(data[1].size() == 2);
+            CHECK(data[1][0] == "third");
+            CHECK(data[1][1] == "fourth");
+        }
+
+        SECTION("read array in array")
+        {
+            ContainerNode arrayNode = doc.readArray("arrayOfStringVectors");
+            std::vector<std::string> data;
+            while (arrayNode.hasUnread())
+            {
+                ContainerNode subNode = arrayNode.readArray("vector");
+                while (subNode.hasUnread())
+                {
+                    data.push_back(subNode.readString("add"));
+                }
+            }
+            REQUIRE(4 == data.size());
+            CHECK(data[0] == "first");
+            CHECK(data[1] == "second");
+            CHECK(data[2] == "third");
+            CHECK(data[3] == "fourth");
+        }
+    }
+
     SECTION("read object")
     {
         SimpleClass simpleClass { "simpleClass" };
         doc.readObject(simpleClass);
         CHECK(simpleClass.intValue == 15);
         CHECK(simpleClass.stringValue == "string");
-    }
-
-    SECTION("read array of objects")
-    {
-        ContainerNode arrayNode = doc.readArray("simpleClassArray");
-        std::vector<SimpleClass> data;
-        while (arrayNode.hasUnread())
-        {
-            SimpleClass obj { "simpleClass" };
-            arrayNode.readObject(obj);
-            data.push_back(obj);
-        }
-        REQUIRE(2 == data.size());
-        CHECK(data[0].intValue == 16);
-        CHECK(data[1].intValue == 17);
-
-        //TODO: test read string vector from array
-        //TODO: test read simple data from array
-    }
-
-    SECTION("read int array")
-    {
-        ContainerNode arrayNode = doc.readArray("intArray");
-        std::vector<int> data;
-        while (arrayNode.hasUnread())
-        {
-            data.push_back(arrayNode.readInt());
-        }
-        REQUIRE(2 == data.size());
-        CHECK(data[0] == 19);
-        CHECK(data[1] == 20);
-    }
-
-    SECTION("read StringVector array")
-    {
-        ContainerNode arrayNode = doc.readArray("arrayOfStringVectors");
-        std::vector<StringVector> data;
-        while (arrayNode.hasUnread())
-        {
-            data.push_back(arrayNode.readStringVector());
-        }
-        REQUIRE(2 == data.size());
-        CHECK(data[0].size() == 2);
-        CHECK(data[0][0] == "first");
-        CHECK(data[0][1] == "second");
-        CHECK(data[1].size() == 2);
-        CHECK(data[1][0] == "third");
-        CHECK(data[1][1] == "fourth");
-    }
-
-    SECTION("read array in array")
-    {
-        ContainerNode arrayNode = doc.readArray("arrayOfStringVectors");
-        std::vector<std::string> data;
-        while (arrayNode.hasUnread())
-        {
-            ContainerNode subNode = arrayNode.readArray("vector");
-            while (subNode.hasUnread())
-            {
-                data.push_back(subNode.readString("add"));
-            }
-        }
-        REQUIRE(4 == data.size());
-        CHECK(data[0] == "first");
-        CHECK(data[1] == "second");
-        CHECK(data[2] == "third");
-        CHECK(data[3] == "fourth");
     }
 
     SECTION("read container")
