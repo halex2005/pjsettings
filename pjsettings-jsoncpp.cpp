@@ -20,6 +20,7 @@
  */
 #include <stdexcept>
 #include <iostream>
+#include <fstream>
 #include "pjsettings-jsoncpp.h"
 
 using namespace pj;
@@ -79,10 +80,12 @@ namespace pjsettings
 
     void PjJsonCppDocument::loadFile(const std::string &filename) throw(pj::Error)
     {
-        bool result = false;
-        if (!result)
+        std::ifstream input(filename.c_str(), std::ifstream::binary);
+        Json::Reader reader;
+        bool parsedSuccessfully = reader.parse(input, _document);
+        if (!parsedSuccessfully)
         {
-            throw Error(1, "jsoncpp load from file error", "?", filename.c_str(), 0);
+            throw Error(1, "jsoncpp load from file error", reader.getFormattedErrorMessages(), filename, 0);
         }
         initRoot();
     }
