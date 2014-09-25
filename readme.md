@@ -54,7 +54,50 @@ This library use great libraries to work well (in alphabetical order):
 Usage
 -----
 
+### XML-based configuration
 
+You can use class pjsettings::PjPugixmlDocument to read xml configuration:
+
+```c++
+pjsettings::PjPugixmlDocument doc;
+try
+{
+    doc.loadFile("config.xml");
+}
+catch (pj::Error &err)
+{
+    std::cerr << err.info(true) << std::endl;
+    throw;
+}
+```
+
+After the document is successfully loaded, it is ready to read persistent objects.
+You can use document in almost in all cases where you can use [pj::JsonDocument class](http://www.pjsip.org/docs/book-latest/html/intro_pjsua2.html#objects-persistence).
+For example, you can read [pj::EpConfig (endpoint configuration class)](http://www.pjsip.org/docs/book-latest/html/endpoint.html#endpoint-configurations):
+
+```c++
+pj::EpConfig config;
+doc.readObject(config);
+```
+
+### json-based configuration
+
+You can use class pjsettings::PjJsonCppDocument to read json configuration:
+
+```c++
+pjsettings::PjPugixmlDocument doc;
+try
+{
+    doc.loadFile("config.xml");
+}
+catch (pj::Error &err)
+{
+    std::cerr << err.info(true) << std::endl;
+    throw;
+}
+```
+
+Using of document class for reading persistent objects is same as for pjsettings::PjPugixmlDocument and pj::JsonDocument.
 
 License
 -------
