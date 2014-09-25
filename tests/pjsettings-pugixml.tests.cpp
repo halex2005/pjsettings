@@ -206,8 +206,7 @@ SCENARIO("pugixml read pjsip LogConfig")
             "        fileFlags=\"0\"\n"
             "        >"
             "    </LogConfig>"
-            "</root>,\n"
-            "}";
+            "</root>";
         PjPugixmlDocument doc;
         doc.loadString(xmlString);
 

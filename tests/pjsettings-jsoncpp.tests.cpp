@@ -1,6 +1,7 @@
 #include <catch/catch.hpp>
-#include <pjsettings-jsoncpp.h>
 #include <iostream>
+#include <pjsettings-jsoncpp.h>
+#include <pjsua2/endpoint.hpp>
 #include "SimpleClass.h"
 
 using namespace Json;
@@ -206,4 +207,67 @@ SCENARIO("read json from string")
         node.readObject(simpleClass);
         CHECK(simpleClass.intValue == 18);
     }
+}
+
+SCENARIO("jsoncpp read pjsip LogConfig")
+{
+    SECTION("read ordered config values")
+    {
+        const char *jsonString = "{\n"
+            "    \"LogConfig\": {\n"
+            "        \"msgLogging\": 1,\n"
+            "        \"level\": 5,\n"
+            "        \"consoleLevel\": 4,\n"
+            "        \"decor\": 25328,\n"
+            "        \"filename\": \"pjsip.log\",\n"
+            "        \"fileFlags\": 0\n"
+            "    }\n"
+            "}";
+        PjJsonCppDocument doc;
+        doc.loadString(jsonString);
+
+        LogConfig config;
+        doc.readObject(config);
+
+        CHECK(1 == config.msgLogging);
+        CHECK(5 == config.level);
+        CHECK(4 == config.consoleLevel);
+        CHECK("pjsip.log" == config.filename);
+    }
+
+    SECTION("read unordered config values")
+    {
+        const char *xmlString = "{\n"
+            "    \"LogConfig\": {\n"
+            "        \"filename\": \"pjsip.log\",\n"
+            "        \"level\": 5,\n"
+            "        \"consoleLevel\": 4\n"
+            "    }\n"
+            "}";
+
+        PjJsonCppDocument doc;
+        doc.loadString(xmlString);
+
+        LogConfig config;
+        doc.readObject(config);
+
+        CHECK(5 == config.level);
+        CHECK(4 == config.consoleLevel);
+        CHECK("pjsip.log" == config.filename);
+    }
+}
+
+SCENARIO("jsoncpp from file")
+{
+    const char *filename = "test-config-jsoncpp.json";
+
+    PjJsonCppDocument doc;
+    doc.loadFile(filename);
+
+    LogConfig config;
+    doc.readObject(config);
+
+    CHECK(5 == config.level);
+    CHECK(4 == config.consoleLevel);
+    CHECK("pjsip.log" == config.filename);
 }
