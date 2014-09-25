@@ -24,7 +24,7 @@ For example, if you can have this json document:
         "decor": 25328,
         "filename": "pjsip.log",
         "fileFlags": 0
-    },
+    }
 }
 ```
 
@@ -36,8 +36,8 @@ or you can have just small part of fields, and can reorder them on your own:
     "LogConfig": {
         "filename": "pjsip.log",
         "level": 5,
-        "consoleLevel": 4,
-    },
+        "consoleLevel": 4
+    }
 }
 ```
 
