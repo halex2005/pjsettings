@@ -1,6 +1,7 @@
 #include <catch/catch.hpp>
 #include <pjsettings-pugixml.h>
 #include <pjsua2/endpoint.hpp>
+#include <iostream>
 #include "SimpleClass.h"
 
 using namespace pj;
@@ -8,38 +9,52 @@ using namespace pjsettings;
 
 SCENARIO("pugixml from string")
 {
-    const char *xmlString = "\
-<?xml version=\"1.0\"?>\
-<root intValue=\"14\" stringValue=\"string\" doubleValue=\"2.5\" trueBool=\"true\" falseBool=\"false\">\
-<simpleClass intValue=\"15\" stringValue=\"string\" />\
-<stringsArray>\
-  <add>string</add>\
-  <add>other string</add>\
-</stringsArray>\
-<simpleClassArray>\
-  <add intValue=\"16\" />\
-  <add intValue=\"17\" />\
-</simpleClassArray>\
-<simpleContainer>\
-  <simpleClass intValue=\"18\" />\
-</simpleContainer>\
-<intArray>\
-  <add>19</add>\
-  <add>20</add>\
-</intArray>\
-<arrayOfStringVectors>\
-  <vector>\
-    <add>first</add>\
-    <add>second</add>\
-  </vector>\
-  <vector>\
-    <add>third</add>\
-    <add>fourth</add>\
-  </vector>\
-</arrayOfStringVectors>\
-</root>";
+    const char *xmlString = ""
+        "<?xml version=\"1.0\"?>\n"
+        "<root intValue=\"14\"\n"
+        "      stringValue=\"string\"\n"
+        "      doubleValue=\"2.5\"\n"
+        "      trueBool=\"true\"\n"
+        "      falseBool=\"false\"\n"
+        "      >\n"
+        "   <simpleClass intValue=\"15\"\n"
+        "                stringValue=\"string\" />\n"
+        "   <stringsArray>\n"
+        "       <add>string</add>\n"
+        "       <add>other string</add>\n"
+        "   </stringsArray>\n"
+        "   <simpleClassArray>\n"
+        "       <add intValue=\"16\" />\n"
+        "       <add intValue=\"17\" />\n"
+        "   </simpleClassArray>\n"
+        "   <simpleContainer>\n"
+        "       <simpleClass intValue=\"18\" />\n"
+        "   </simpleContainer>\n"
+        "   <intArray>\n"
+        "       <add>19</add>\n"
+        "       <add>20</add>\n"
+        "   </intArray>\n"
+        "   <arrayOfStringVectors>\n"
+        "       <vector>\n"
+        "           <add>first</add>\n"
+        "           <add>second</add>\n"
+        "       </vector>\n"
+        "       <vector>\n"
+        "           <add>third</add>\n"
+        "           <add>fourth</add>\n"
+        "       </vector>\n"
+        "   </arrayOfStringVectors>\n"
+        "</root>";
     PjPugixmlDocument doc;
-    doc.loadString(xmlString);
+    try
+    {
+        doc.loadString(xmlString);
+    }
+    catch (Error &err)
+    {
+        std::cerr << err.info(true) << std::endl;
+        throw;
+    }
 
     SECTION("read simple data types")
     {
