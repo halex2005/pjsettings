@@ -3,7 +3,7 @@ compiler:
   - clang
   - gcc
 install:
-  - sudo apt-get install pkg-config
+  - sudo apt-get install pkg-config libsrtp0 libstrp0-dev
   - wget http://www.pjsip.org/release/2.3/pjproject-2.3.tar.bz2
   - tar jxf pjproject-2.3.tar.bz2
   - pushd pjproject-2.3
@@ -16,22 +16,21 @@ install:
   - sudo cp -R pjmedia/include /usr/local
   - sudo cp -R pjnath/include /usr/local
   - sudo cp -R pjsip/include /usr/local
-  - ls -1R /usr/local/include
+  - ls -1 /usr/local/include
   - sudo cp -R pjlib/lib /usr/local
   - sudo cp -R pjlib-util/lib /usr/local
   - sudo cp -R pjmedia/lib /usr/local
   - sudo cp -R pjnath/lib /usr/local
   - sudo cp -R pjsip/lib /usr/local
-  - ls -1R /usr/local/lib
+  - ls -1 /usr/local/lib
   - popd
   - sudo cp tests/libpjproject.pc /usr/lib/pkgconfig
-  - ls -1R /usr/lib/pkgconfig
+  - ls -1 /usr/lib/pkgconfig
 script:
   - mkdir tmp
   - pushd tmp
   - cmake ..
-  - make
-  - ./tests/test-pjsettings
+  - make && ./tests/test-pjsettings
   - popd
 os:
   - linux
