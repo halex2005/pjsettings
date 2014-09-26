@@ -11,20 +11,10 @@ install:
   - make dep
   - make clean
   - make
-  - sudo cp -R pjlib/include /usr/local
-  - sudo cp -R pjlib-util/include /usr/local
-  - sudo cp -R pjmedia/include /usr/local
-  - sudo cp -R pjnath/include /usr/local
-  - sudo cp -R pjsip/include /usr/local
-  - ls -1 /usr/local/include
-  - sudo cp -R pjlib/lib /usr/local
-  - sudo cp -R pjlib-util/lib /usr/local
-  - sudo cp -R pjmedia/lib /usr/local
-  - sudo cp -R pjnath/lib /usr/local
-  - sudo cp -R pjsip/lib /usr/local
-  - ls -1 /usr/local/lib
+  - make install
   - popd
-  - sudo cp tests/libpjproject.pc /usr/lib/pkgconfig
+  - ls -1 /usr/local/include
+  - ls -1 /usr/local/lib
   - ls -1 /usr/lib/pkgconfig
 script:
   - mkdir tmp
