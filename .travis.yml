@@ -16,13 +16,16 @@ install:
   - sudo cp -R pjmedia/include /usr/local/include
   - sudo cp -R pjnath/include /usr/local/include
   - sudo cp -R pjsip/include /usr/local/include
+  - ls -1R /usr/local/include
   - sudo cp -R pjlib/lib /usr/local/lib
   - sudo cp -R pjlib-util/lib /usr/local/lib
   - sudo cp -R pjmedia/lib /usr/local/lib
   - sudo cp -R pjnath/lib /usr/local/lib
   - sudo cp -R pjsip/lib /usr/local/lib
+  - ls -1R /usr/local/lib
   - popd
   - sudo cp tests/libpjproject.pc /usr/lib/pkgconfig
+  - ls -1R /usr/lib/pkgconfig
 script:
   - mkdir tmp
   - pushd tmp
