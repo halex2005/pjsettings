@@ -3,7 +3,7 @@ compiler:
   - clang
   - gcc
 install:
-  - sudo apt-get install pkg-config libsrtp0 libsrtp0-dev
+  - sudo apt-get install pkg-config libsrtp0 libsrtp0-dev libboost-all-dev
   - wget http://www.pjsip.org/release/2.3/pjproject-2.3.tar.bz2
   - tar jxf pjproject-2.3.tar.bz2
   - pushd pjproject-2.3
