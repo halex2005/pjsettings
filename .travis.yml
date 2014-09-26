@@ -20,7 +20,7 @@ script:
   - mkdir tmp
   - pushd tmp
   - cmake ..
-  - make && ./tests/test-pjsettings
+  - make && pushd tests && test-pjsettings && popd
   - popd
 os:
   - linux
