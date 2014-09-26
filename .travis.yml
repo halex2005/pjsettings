@@ -11,7 +11,7 @@ install:
   - make dep
   - make clean
   - make
-  - make install
+  - sudo make install
   - popd
   - ls -1 /usr/local/include
   - ls -1 /usr/local/lib
