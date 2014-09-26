@@ -353,7 +353,24 @@ namespace pjsettings
 
     static void          pugixmlNode_writeStringVector(ContainerNode *node, const string &name, const StringVector &value) throw(Error)
     {
+        pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
+        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+        pugi::xml_node workNode;
+        if (arrayData != NULL)
+        {
+            pugi::xml_node arrayIterator(arrayData);
+            workNode = arrayIterator.append_child(name.c_str());
+        }
+        else
+        {
+            pugi::xml_node element(data);
+            workNode = element.append_child(name.c_str());
+        }
 
+        for (StringVector::const_iterator it = value.begin(); it != value.end(); ++it)
+        {
+            workNode.append_child("item").text().set((*it).c_str());
+        }
     }
 
     static ContainerNode pugixmlNode_writeNewContainer(ContainerNode *node, const string &name) throw(Error)
