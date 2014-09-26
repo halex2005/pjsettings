@@ -14,7 +14,7 @@ must be the same as the order of writing.
 
 This library provides classes capable reading of documents in non-serial way.
 
-For example, if you can have this json document:
+For example, you can have this json document in usual serial way:
 
 ```json
 // example of full json-representation for class pj::LogConfig
