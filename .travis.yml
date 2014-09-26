@@ -7,7 +7,10 @@ install:
   - wget http://www.pjsip.org/release/2.3/pjproject-2.3.tar.bz2
   - tar jxf pjproject-2.3.tar.bz2
   - pushd pjproject-2.3
-  - ./configure && make dep && make clean && make
+  - ./configure
+  - make dep
+  - make clean
+  - make
   - sudo cp -R pjlib/include /usr/local/include
   - sudo cp -R pjlib-util/include /usr/local/include
   - sudo cp -R pjmedia/include /usr/local/include
@@ -20,6 +23,12 @@ install:
   - sudo cp -R pjsip/lib /usr/local/lib
   - popd
   - sudo cp tests/libpjproject.pc /usr/lib/pkgconfig
-script: cmake && make
+script:
+  - mkdir tmp
+  - pushd tmp
+  - cmake ..
+  - make
+  - ./tests/test-pjsettings
+  - popd
 os:
   - linux
