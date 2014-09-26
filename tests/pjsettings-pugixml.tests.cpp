@@ -1,3 +1,4 @@
+#include <boost/filesystem/operations.hpp>
 #include <catch/catch.hpp>
 #include <pjsettings-pugixml.h>
 #include <pjsua2/endpoint.hpp>
@@ -285,4 +286,40 @@ SCENARIO("pugixml from file")
     CHECK(5 == config.level);
     CHECK(4 == config.consoleLevel);
     CHECK("pjsip.log" == config.filename);
+}
+
+SCENARIO("pugixml write pjsip LogConfig")
+{
+    LogConfig config;
+    config.filename = "pjsip.log";
+    config.consoleLevel = 1;
+    config.level = 2;
+
+    PjPugixmlDocument doc;
+    doc.writeObject(config);
+
+    SECTION("write to string")
+    {
+        std::string savedString = doc.saveString();
+
+        std::cout << "pugixml string:" << std::endl << savedString << std::endl;
+
+        size_t npos = std::string::npos;
+        CHECK(savedString.find("<root>") != npos);
+        CHECK(savedString.find("</root>") != npos);
+        CHECK(savedString.find("LogConfig") != npos);
+        CHECK(savedString.find("filename=\"pjsip.log\"") != npos);
+        CHECK(savedString.find("consoleLevel=\"1\"") != npos);
+        CHECK(savedString.find("level=\"2\"") != npos);
+    }
+
+    SECTION("write to file")
+    {
+        using namespace boost::filesystem;
+        char const *filename = "test-save-LogConfig-to-file.xml";
+        remove(filename);
+        CHECK(!exists(filename));
+        doc.saveFile(filename);
+        REQUIRE(exists(filename));
+    }
 }

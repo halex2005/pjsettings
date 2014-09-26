@@ -2,6 +2,25 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 include_directories(.)
 
+###################################
+# boost
+add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
+set (Boost_USE_STATIC_LIBS ON)
+set (Boost_USE_MULTITHREADED ON)
+find_package(Boost 1.45.0 REQUIRED
+    COMPONENTS
+        filesystem
+        system
+    )
+if(NOT Boost_FOUND)
+    message(SEND_ERROR "Failed to find boost libraries")
+    return()
+else()
+    include_directories(${Boost_INCLUDE_DIRS})
+    link_directories(${Boost_LIBRARY_DIRS})
+endif()
+###################################
+
 add_executable(test-pjsettings
     main.cpp
     pjsettings-jsoncpp.tests.cpp
@@ -10,16 +29,20 @@ add_executable(test-pjsettings
     test-config-jsoncpp.json
     test-config-pugixml.xml
 )
-target_link_libraries(test-pjsettings pjsettings)
+target_link_libraries(test-pjsettings pjsettings ${Boost_LIBRARIES})
 if (UNIX)
     add_definitions(-fpermissive)
 
+    ###################################
+    # PJSIP
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(PJSIP libpjproject REQUIRED)
     if (NOT PJSIP_FOUND)
         message(SEND_ERROR "PJSIP libraries not found")
         return()
     endif()
+    ###################################
+
     target_link_libraries(test-pjsettings ${PJSIP_STATIC_LIBRARIES})
 endif()
 

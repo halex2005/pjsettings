@@ -20,6 +20,7 @@
  */
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
 #include "pjsettings-pugixml.h"
 
 using namespace pj;
@@ -65,6 +66,8 @@ namespace pjsettings
         : _document()
         , _rootNode()
     {
+        _document.root().append_child("root");
+        initRoot();
     }
 
     void PjPugixmlDocument::initRoot()
@@ -98,12 +101,36 @@ namespace pjsettings
 
     void PjPugixmlDocument::saveFile(const std::string &filename) throw(pj::Error)
     {
-        throw std::runtime_error("not implemented");
+        try
+        {
+            _document.save_file(
+                filename.c_str(),
+                "    ",
+                pugi::format_default,
+                pugi::encoding_utf8);
+        }
+        catch (std::exception &ex)
+        {
+            throw Error(1, "pugixml save to file error", ex.what(), "", 0);
+        }
     }
 
     std::string PjPugixmlDocument::saveString() throw(pj::Error)
     {
-        throw std::runtime_error("not implemented");
+        try
+        {
+            std::ostringstream result;
+            _document.save(
+                result,
+                "    ",
+                pugi::format_default,
+                pugi::encoding_utf8);
+            return result.str();
+        }
+        catch (std::exception &ex)
+        {
+            throw Error(1, "pugixml save to string error", ex.what(), "", 0);
+        }
     }
 
     pj::ContainerNode &PjPugixmlDocument::getRootContainer() const
@@ -278,17 +305,50 @@ namespace pjsettings
 
     static void          pugixmlNode_writeNumber(ContainerNode *node, const string &name, float num) throw(Error)
     {
-
+        pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
+        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+        if (arrayData != NULL)
+        {
+            pugi::xml_node arrayIterator(arrayData);
+            arrayIterator.append_child("item").text().set(num);
+        }
+        else
+        {
+            pugi::xml_node element(data);
+            element.append_attribute(name.c_str()).set_value(num);
+        }
     }
 
     static void          pugixmlNode_writeBool(ContainerNode *node, const string &name, bool value) throw(Error)
     {
-
+        pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
+        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+        if (arrayData != NULL)
+        {
+            pugi::xml_node arrayIterator(arrayData);
+            arrayIterator.append_child("item").text().set(value);
+        }
+        else
+        {
+            pugi::xml_node element(data);
+            element.append_attribute(name.c_str()).set_value(value);
+        }
     }
 
     static void          pugixmlNode_writeString(ContainerNode *node, const string &name, const string &value) throw(Error)
     {
-
+        pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
+        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+        if (arrayData != NULL)
+        {
+            pugi::xml_node arrayIterator(arrayData);
+            arrayIterator.append_child("item").text().set(value.c_str());
+        }
+        else
+        {
+            pugi::xml_node element(data);
+            element.append_attribute(name.c_str()).set_value(value.c_str());
+        }
     }
 
     static void          pugixmlNode_writeStringVector(ContainerNode *node, const string &name, const StringVector &value) throw(Error)
@@ -298,12 +358,47 @@ namespace pjsettings
 
     static ContainerNode pugixmlNode_writeNewContainer(ContainerNode *node, const string &name) throw(Error)
     {
-        return *node;
+        pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
+        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+        pugi::xml_node workNode;
+        if (arrayData != NULL)
+        {
+            pugi::xml_node arrayIterator(arrayData);
+            workNode = arrayIterator.append_child(name.c_str());
+        }
+        else
+        {
+            pugi::xml_node element(data);
+            workNode = element.append_child(name.c_str());
+        }
+        ContainerNode childNode = {};
+        childNode.op = &pugixml_op;
+        childNode.data.doc = node->data.doc;
+        childNode.data.data1 = workNode.internal_object();
+        return childNode;
     }
 
     static ContainerNode pugixmlNode_writeNewArray(ContainerNode *node, const string &name) throw(Error)
     {
-        return *node;
+        pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
+        pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
+        pugi::xml_node workNode;
+        if (arrayData != NULL)
+        {
+            pugi::xml_node arrayIterator(arrayData);
+            workNode = arrayIterator.append_child("item");
+        }
+        else
+        {
+            pugi::xml_node element(data);
+            workNode = element.append_child(name.c_str());
+        }
+        ContainerNode childNode = {};
+        childNode.op = &pugixml_op;
+        childNode.data.doc = node->data.doc;
+        childNode.data.data1 = workNode.internal_object();
+        childNode.data.data2 = workNode.internal_object();
+        return childNode;
     }
 
 }
