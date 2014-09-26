@@ -3,11 +3,23 @@ compiler:
   - clang
   - gcc
 install:
-  - sudo apt-get update
-  - sudo apt-get install aptitude
-  - aptitude search pj
-  - sudo apt-get install pjsip
   - sudo apt-get install pkg-config
+  - wget http://www.pjsip.org/release/2.3/pjproject-2.3.tar.bz2
+  - tar jxf pjproject-2.3.tar.bz2
+  - pushd pjproject-2.3
+  - ./configure && make dep && make clean && make
+  - sudo cp -R pjlib/include /usr/local/include
+  - sudo cp -R pjlib-util/include /usr/local/include
+  - sudo cp -R pjmedia/include /usr/local/include
+  - sudo cp -R pjnath/include /usr/local/include
+  - sudo cp -R pjsip/include /usr/local/include
+  - sudo cp -R pjlib/lib /usr/local/lib
+  - sudo cp -R pjlib-util/lib /usr/local/lib
+  - sudo cp -R pjmedia/lib /usr/local/lib
+  - sudo cp -R pjnath/lib /usr/local/lib
+  - sudo cp -R pjsip/lib /usr/local/lib
+  - popd
+  - sudo cp tests/libpjproject.pc /usr/lib/pkgconfig
 script: cmake && make
 os:
   - linux
