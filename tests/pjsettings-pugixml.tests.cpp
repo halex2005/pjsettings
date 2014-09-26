@@ -288,6 +288,79 @@ SCENARIO("pugixml from file")
     CHECK("pjsip.log" == config.filename);
 }
 
+
+bool contains_string(PjPugixmlDocument &doc, const std::string &search)
+{
+    std::string result = doc.saveString();
+    bool expression = result.find(search) != std::string::npos;
+    if (!expression)
+    {
+        std::cout << "substring " << search << " not found in serialized document:" << std::endl << result << std::endl;
+    }
+    return expression;
+}
+
+SCENARIO("pugixml to string")
+{
+    PjPugixmlDocument doc;
+
+    SECTION("write simple data types")
+    {
+        ContainerNode &node = doc.getRootContainer();
+
+        SECTION("write integer")
+        {
+            int intValue = 14;
+            NODE_WRITE_INT(node, intValue);
+            CHECK(contains_string(doc, "intValue=\"14\""));
+        }
+
+        SECTION("write double")
+        {
+            double doubleValue = 2.5;
+            NODE_WRITE_FLOAT(node, doubleValue);
+            CHECK(contains_string(doc, "doubleValue=\"2.5\""));
+        }
+
+        SECTION("write string")
+        {
+            std::string stringValue = "string";
+            NODE_WRITE_STRING(node, stringValue);
+            CHECK(contains_string(doc, "stringValue=\"string\""));
+        }
+
+        WHEN("write bool")
+        {
+            THEN("true bool")
+            {
+                bool trueBool = true;
+                NODE_WRITE_BOOL(node, trueBool);
+                CHECK(contains_string(doc, "trueBool=\"true\""));
+            }
+
+            THEN("false bool")
+            {
+                bool falseBool = false;
+                NODE_WRITE_BOOL(node, falseBool);
+                CHECK(contains_string(doc, "falseBool=\"false\""));
+            }
+        }
+
+        SECTION("write string vector")
+        {
+            StringVector stringsArray;
+            stringsArray.push_back("string");
+            stringsArray.push_back("other string");
+
+            NODE_WRITE_STRINGV(node, stringsArray);
+            CHECK(contains_string(doc, "<stringsArray>"));
+            CHECK(contains_string(doc, "<item>string</item>"));
+            CHECK(contains_string(doc, "<item>other string</item>"));
+            CHECK(contains_string(doc, "</stringsArray>"));
+        }
+    }
+}
+
 SCENARIO("pugixml write pjsip LogConfig")
 {
     LogConfig config;
