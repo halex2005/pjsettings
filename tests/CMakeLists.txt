@@ -22,6 +22,12 @@ if (UNIX)
     endif()
     link_directories(${PJSIP_LIBRARY_DIRS})
     target_link_libraries(test-pjsettings ${PJSIP_LIBRARIES})
+    message(STATUS "PJSIP_FOUND         = ${PJSIP_FOUND}")
+    message(STATUS "PJSIP_INCLUDE_DIR   = ${PJSIP_INCLUDE_DIR}")
+    message(STATUS "PJSIP_INCLUDE_DIRS  = ${PJSIP_INCLUDE_DIRS}")
+    message(STATUS "PJSIP_LIBRARY_DIR   = ${PJSIP_LIBRARY_DIR}")
+    message(STATUS "PJSIP_LIBRARY_DIRS  = ${PJSIP_LIBRARY_DIRS}")
+    message(STATUS "PJSIP_LIBRARIES     = ${PJSIP_LIBRARIES}")
 endif()
 
 add_custom_command(
