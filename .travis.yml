@@ -13,9 +13,6 @@ install:
   - make
   - sudo make install
   - popd
-  - ls -1 /usr/local/include
-  - ls -1 /usr/local/lib
-  - ls -1 /usr/lib/pkgconfig
 script:
   - mkdir tmp
   - pushd tmp
