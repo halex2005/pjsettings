@@ -12,7 +12,6 @@ add_executable(test-pjsettings
 )
 target_link_libraries(test-pjsettings pjsettings)
 if (UNIX)
-    add_definitions(-std=c++11)
     add_definitions(-fpermissive)
 
     find_package(PkgConfig REQUIRED)

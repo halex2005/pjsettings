@@ -107,7 +107,7 @@ SCENARIO("read json from string")
             std::vector<SimpleClass> data;
             while (arrayNode.hasUnread())
             {
-                SimpleClass obj { "simpleClass" };
+                SimpleClass obj("simpleClass");
                 arrayNode.readObject(obj);
                 data.push_back(obj);
             }
@@ -194,7 +194,7 @@ SCENARIO("read json from string")
 
     SECTION("read object")
     {
-        SimpleClass simpleClass { "simpleClass" };
+        SimpleClass simpleClass("simpleClass");
         doc.readObject(simpleClass);
         CHECK(simpleClass.intValue == 15);
         CHECK(simpleClass.stringValue == "string");
@@ -203,7 +203,7 @@ SCENARIO("read json from string")
     SECTION("read container")
     {
         ContainerNode node = doc.readContainer("simpleContainer");
-        SimpleClass simpleClass { "simpleClass" };
+        SimpleClass simpleClass("simpleClass");
         node.readObject(simpleClass);
         CHECK(simpleClass.intValue == 18);
     }
