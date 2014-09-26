@@ -358,6 +358,126 @@ SCENARIO("pugixml to string")
             CHECK(contains_string(doc, "<item>other string</item>"));
             CHECK(contains_string(doc, "</stringsArray>"));
         }
+
+        SECTION("write container")
+        {
+            ContainerNode node = doc.writeNewContainer("simpleContainer");
+
+            WHEN("empty container")
+            {
+                CHECK(contains_string(doc, "<simpleContainer />"));
+            }
+
+            WHEN("one attribute")
+            {
+                node.writeInt("intValue", 21);
+                CHECK(contains_string(doc, "<simpleContainer intValue=\"21\" />"));
+            }
+
+            WHEN("container inside")
+            {
+                node.writeNewContainer("subContainer");
+                CHECK(contains_string(doc, "<simpleContainer>"));
+                CHECK(contains_string(doc, "<subContainer />"));
+                CHECK(contains_string(doc, "</simpleContainer>"));
+            }
+
+            WHEN("array inside")
+            {
+                node.writeNewArray("subArray");
+                CHECK(contains_string(doc, "<simpleContainer>"));
+                CHECK(contains_string(doc, "<subArray />"));
+                CHECK(contains_string(doc, "</simpleContainer>"));
+            }
+        }
+
+        SECTION("write object")
+        {
+            SimpleClass simpleClass("simpleClass", 15, "string");
+            doc.writeObject(simpleClass);
+            CHECK(contains_string(doc, "<simpleClass"));
+            CHECK(contains_string(doc, "intValue=\"15\""));
+            CHECK(contains_string(doc, "stringValue=\"string\""));
+            CHECK(contains_string(doc, "/>"));
+        }
+    }
+
+    SECTION("write to array")
+    {
+        ContainerNode arrayNode = doc.writeNewArray("arrayNode");
+
+        SECTION("empty array")
+        {
+            CHECK(contains_string(doc, "<arrayNode />"));
+        }
+
+        SECTION("write int to array")
+        {
+            arrayNode.writeInt("int", 19);
+            CHECK(contains_string(doc, "<item>19</item>"));
+        }
+
+        SECTION("write double to array")
+        {
+            arrayNode.writeNumber("float", 2.5);
+            CHECK(contains_string(doc, "<item>2.5</item>"));
+        }
+
+        SECTION("write string to array")
+        {
+            arrayNode.writeString("string", "some string");
+            CHECK(contains_string(doc, "<item>some string</item>"));
+        }
+
+        SECTION("write bool to array")
+        {
+            WHEN("true bool")
+            {
+                arrayNode.writeBool("boolean", true);
+                CHECK(contains_string(doc, "<item>true</item>"));
+            }
+
+            WHEN("false bool")
+            {
+                arrayNode.writeBool("boolean", false);
+                CHECK(contains_string(doc, "<item>false</item>"));
+            }
+        }
+
+        SECTION("write StringVector to array")
+        {
+            StringVector s1;
+            s1.push_back("first");
+            s1.push_back("second");
+            arrayNode.writeStringVector("stringVector", s1);
+
+            CHECK(contains_string(doc, "<stringVector>"));
+            CHECK(contains_string(doc, "</stringVector>"));
+            CHECK(contains_string(doc, "<item>first</item>"));
+            CHECK(contains_string(doc, "<item>second</item>"));
+        }
+
+        SECTION("write container to array")
+        {
+            arrayNode.writeNewContainer("simple");
+            CHECK(contains_string(doc, "<simple />"));
+        }
+
+        SECTION("write object to array")
+        {
+            SimpleClass simpleClass("simple", 16);
+            arrayNode.writeObject(simpleClass);
+            CHECK(contains_string(doc, "<simple intValue=\"16\""));
+        }
+
+        SECTION("write array in array")
+        {
+            ContainerNode subArray = arrayNode.writeNewArray("subArray");
+            subArray.writeInt("int", 20);
+            CHECK(contains_string(doc, "<subArray>"));
+            CHECK(contains_string(doc, "</subArray>"));
+            CHECK(contains_string(doc, "<item>20</item>"));
+        }
     }
 }
 
@@ -374,8 +494,6 @@ SCENARIO("pugixml write pjsip LogConfig")
     SECTION("write to string")
     {
         std::string savedString = doc.saveString();
-
-        std::cout << "pugixml string:" << std::endl << savedString << std::endl;
 
         size_t npos = std::string::npos;
         CHECK(savedString.find("<root>") != npos);

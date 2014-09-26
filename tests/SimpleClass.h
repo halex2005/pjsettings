@@ -11,6 +11,13 @@ public:
     {
     }
 
+    SimpleClass(const std::string &elementName, int i, std::string s = "")
+        : _elementName(elementName)
+        , intValue(i)
+        , stringValue(s)
+    {
+    }
+
     virtual void readObject(const pj::ContainerNode &node) throw(pj::Error)
     {
         pj::ContainerNode this_node = node.readContainer(_elementName.c_str());
@@ -18,10 +25,9 @@ public:
         NODE_READ_STRING(this_node, stringValue);
     }
 
-
     virtual void writeObject(pj::ContainerNode &node) const throw(pj::Error)
     {
-        pj::ContainerNode this_node = node.readContainer(_elementName.c_str());
+        pj::ContainerNode this_node = node.writeNewContainer(_elementName.c_str());
         NODE_WRITE_INT(this_node, intValue);
         NODE_WRITE_STRING(this_node, stringValue);
     }

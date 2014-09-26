@@ -380,7 +380,7 @@ namespace pjsettings
         pugi::xml_node workNode;
         if (arrayData != NULL)
         {
-            pugi::xml_node arrayIterator(arrayData);
+            pugi::xml_node arrayIterator(data);
             workNode = arrayIterator.append_child(name.c_str());
         }
         else
@@ -403,7 +403,7 @@ namespace pjsettings
         if (arrayData != NULL)
         {
             pugi::xml_node arrayIterator(arrayData);
-            workNode = arrayIterator.append_child("item");
+            workNode = arrayIterator.append_child(name.c_str());
         }
         else
         {
