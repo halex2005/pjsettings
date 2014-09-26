@@ -20,6 +20,7 @@ if (UNIX)
         message(SEND_ERROR "PJSIP libraries not found")
         return()
     endif()
+    link_directories(${PJSIP_LIBRARY_DIRS})
     target_link_libraries(test-pjsettings ${PJSIP_LIBRARIES})
 endif()
 
