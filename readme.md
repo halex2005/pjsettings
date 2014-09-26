@@ -14,10 +14,9 @@ must be the same as the order of writing.
 
 This library provides classes capable reading of documents in non-serial way.
 
-For example, you can have this json document in usual serial way:
+For example, you can read pj::LogConfig object from this json document in usual serial way:
 
 ```json
-// example of full json-representation for class pj::LogConfig
 {
     "LogConfig": {
         "msgLogging": 1,
@@ -33,7 +32,6 @@ For example, you can have this json document in usual serial way:
 or you can have just small part of fields, and can reorder them on your own:
 
 ```json
-// example of small part of fields with reordering
 {
     "LogConfig": {
         "filename": "pjsip.log",
