@@ -8,7 +8,7 @@
 using namespace pj;
 using namespace pjsettings;
 
-SCENARIO("pugixml from string")
+SCENARIO("pugixml from string", "[pugixml]")
 {
     const char *xmlString = ""
         "<?xml version=\"1.0\"?>\n"
@@ -223,7 +223,7 @@ SCENARIO("pugixml from string")
     }
 }
 
-SCENARIO("pugixml read pjsip LogConfig")
+SCENARIO("pugixml read pjsip LogConfig", "[pugixml]")
 {
     SECTION("read ordered config values")
     {
@@ -273,7 +273,7 @@ SCENARIO("pugixml read pjsip LogConfig")
     }
 }
 
-SCENARIO("pugixml from file")
+SCENARIO("pugixml from file", "[pugixml]")
 {
     const char *filename = "test-config-pugixml.xml";
 
@@ -300,7 +300,7 @@ bool contains_string(PjPugixmlDocument &doc, const std::string &search)
     return expression;
 }
 
-SCENARIO("pugixml to string")
+SCENARIO("pugixml to string", "[pugixml]")
 {
     PjPugixmlDocument doc;
 
@@ -481,7 +481,7 @@ SCENARIO("pugixml to string")
     }
 }
 
-SCENARIO("pugixml write pjsip LogConfig")
+SCENARIO("pugixml write pjsip LogConfig", "[pugixml]")
 {
     LogConfig config;
     config.filename = "pjsip.log";
