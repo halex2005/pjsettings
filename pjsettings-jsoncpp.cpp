@@ -18,9 +18,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include <stdexcept>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <stdexcept>
 #include "pjsettings-jsoncpp.h"
 
 using namespace pj;
@@ -63,10 +64,12 @@ namespace pjsettings
         &jsoncppNode_writeNewArray
     };
 
-    PjJsonCppDocument::PjJsonCppDocument()
-        : _document()
+    PjJsonCppDocument::PjJsonCppDocument(bool notStyledOutputOnWriting)
+        : _document(objectValue)
         , _rootNode()
+        , _notStyledOutputOnWriting(notStyledOutputOnWriting)
     {
+        initRoot();
     }
 
     void PjJsonCppDocument::initRoot()
@@ -103,12 +106,48 @@ namespace pjsettings
 
     void PjJsonCppDocument::saveFile(const std::string &filename) throw(pj::Error)
     {
-        throw std::runtime_error("not implemented");
+        try
+        {
+            std::ofstream output(filename.c_str(), std::ifstream::binary);
+            if (_notStyledOutputOnWriting)
+            {
+                Json::FastWriter fastWriter;
+                std::string result = fastWriter.write(_document);
+                output << result;
+            }
+            else
+            {
+                Json::StyledStreamWriter styledWriter("    ");
+                styledWriter.write(output, _document);
+            }
+        }
+        catch (std::exception &ex)
+        {
+            throw Error(1, "jsoncpp save to file error", ex.what(), filename.c_str(), 0);
+        }
     }
 
     std::string PjJsonCppDocument::saveString() throw(pj::Error)
     {
-        throw std::runtime_error("not implemented");
+        try
+        {
+            if (_notStyledOutputOnWriting)
+            {
+                Json::FastWriter fastWriter;
+                return fastWriter.write(_document);
+            }
+            else
+            {
+                Json::StyledStreamWriter styledWriter("    ");
+                std::stringstream output;
+                styledWriter.write(output, _document);
+                return output.str();
+            }
+        }
+        catch (std::exception &ex)
+        {
+            throw Error(1, "jsoncpp save to string error", ex.what(), "", 0);
+        }
     }
 
     pj::ContainerNode &PjJsonCppDocument::getRootContainer() const
@@ -299,32 +338,117 @@ namespace pjsettings
 
     static void          jsoncppNode_writeNumber(ContainerNode *node, const string &name, float num) throw(Error)
     {
-
+        Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        if (arrayIndex > 0)
+        {
+            data.append(Value(num));
+            selectNextArrayElement(node, arrayIndex);
+        }
+        else
+        {
+            data[name] = num;
+        }
     }
 
     static void          jsoncppNode_writeBool(ContainerNode *node, const string &name, bool value) throw(Error)
     {
-
+        Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        if (arrayIndex > 0)
+        {
+            data.append(Value(value));
+            selectNextArrayElement(node, arrayIndex);
+        }
+        else
+        {
+            data[name] = value;
+        }
     }
 
     static void          jsoncppNode_writeString(ContainerNode *node, const string &name, const string &value) throw(Error)
     {
+        Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        if (arrayIndex > 0)
+        {
+            data.append(Value(value));
+            selectNextArrayElement(node, arrayIndex);
+        }
+        else
+        {
+            data[name] = value;
+        }
 
     }
 
     static void          jsoncppNode_writeStringVector(ContainerNode *node, const string &name, const StringVector &value) throw(Error)
     {
-
+        Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        Value stringVector(arrayValue);
+        for (size_t i = 0; i < value.size(); ++i)
+        {
+            stringVector.append(Value(value[i]));
+        }
+        if (arrayIndex > 0)
+        {
+            data.append(stringVector);
+            selectNextArrayElement(node, arrayIndex);
+        }
+        else
+        {
+            data[name] = stringVector;
+        }
     }
 
     static ContainerNode jsoncppNode_writeNewContainer(ContainerNode *node, const string &name) throw(Error)
     {
-        return *node;
+        Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        Value container(objectValue);
+        Value *forChildNode = NULL;
+        if (arrayIndex > 0)
+        {
+            forChildNode = &data.append(container);
+            selectNextArrayElement(node, arrayIndex);
+        }
+        else
+        {
+            data[name] = container;
+            forChildNode = &data[name];
+        }
+
+        ContainerNode childNode = {};
+        childNode.op = &jsoncpp_op;
+        childNode.data.doc = node->data.doc;
+        childNode.data.data1 = forChildNode;
+        return childNode;
     }
 
     static ContainerNode jsoncppNode_writeNewArray(ContainerNode *node, const string &name) throw(Error)
     {
-        return *node;
+        Value &data = get_value(node);
+        ArrayIndex arrayIndex = get_array_index(node);
+        Value container(arrayValue);
+        Value *forChildNode = NULL;
+        if (arrayIndex > 0)
+        {
+            forChildNode = &data.append(container);
+            selectNextArrayElement(node, arrayIndex);
+        }
+        else
+        {
+            data[name] = container;
+            forChildNode = &data[name];
+        }
+
+        ContainerNode childNode = {};
+        childNode.op = &jsoncpp_op;
+        childNode.data.doc = node->data.doc;
+        childNode.data.data1 = forChildNode;
+        childNode.data.data2 = reinterpret_cast<void*>(1);
+        return childNode;
     }
 
 }

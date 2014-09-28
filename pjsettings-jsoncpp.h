@@ -33,7 +33,7 @@ namespace pjsettings
     class PjJsonCppDocument : public pj::PersistentDocument
     {
     public:
-        PjJsonCppDocument();
+        PjJsonCppDocument(bool notStyledOutputOnWriting = false);
         virtual void loadFile(const std::string &filename) throw(pj::Error);
         virtual void loadString(const std::string &input) throw(pj::Error);
         virtual void saveFile(const std::string &filename) throw(pj::Error);
@@ -43,6 +43,7 @@ namespace pjsettings
         void initRoot();
         Json::Value _document;
         mutable pj::ContainerNode _rootNode;
+        bool _notStyledOutputOnWriting;
     };
 
 }
