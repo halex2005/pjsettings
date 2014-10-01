@@ -42,9 +42,9 @@ if (UNIX)
         return()
     endif()
     ###################################
-
-    target_link_libraries(test-pjsettings ${PJSIP_STATIC_LIBRARIES})
 endif()
+
+target_link_libraries(test-pjsettings ${PJSIP_STATIC_LIBRARIES})
 
 add_custom_command(
     TARGET test-pjsettings PRE_BUILD
