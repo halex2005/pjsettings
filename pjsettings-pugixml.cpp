@@ -62,7 +62,7 @@ namespace pjsettings
         &pugixmlNode_writeNewArray
     };
 
-    PjPugixmlDocument::PjPugixmlDocument()
+    PugixmlDocument::PugixmlDocument()
         : _document()
         , _rootNode()
     {
@@ -70,7 +70,7 @@ namespace pjsettings
         initRoot();
     }
 
-    void PjPugixmlDocument::initRoot()
+    void PugixmlDocument::initRoot()
     {
         pugi::xml_node rootElement = _document.root().first_child();
         _rootNode.op = &pugixml_op;
@@ -79,7 +79,7 @@ namespace pjsettings
         _rootNode.data.data2 = NULL;
     }
 
-    void PjPugixmlDocument::loadFile(const std::string &filename) throw(pj::Error)
+    void PugixmlDocument::loadFile(const std::string &filename) throw(pj::Error)
     {
         pugi::xml_parse_result result = _document.load_file(filename.c_str());
         if (!result)
@@ -89,7 +89,7 @@ namespace pjsettings
         initRoot();
     }
 
-    void PjPugixmlDocument::loadString(const std::string &input) throw(pj::Error)
+    void PugixmlDocument::loadString(const std::string &input) throw(pj::Error)
     {
         pugi::xml_parse_result result = _document.load(input.c_str());
         if (!result)
@@ -99,7 +99,7 @@ namespace pjsettings
         initRoot();
     }
 
-    void PjPugixmlDocument::saveFile(const std::string &filename) throw(pj::Error)
+    void PugixmlDocument::saveFile(const std::string &filename) throw(pj::Error)
     {
         try
         {
@@ -115,7 +115,7 @@ namespace pjsettings
         }
     }
 
-    std::string PjPugixmlDocument::saveString() throw(pj::Error)
+    std::string PugixmlDocument::saveString() throw(pj::Error)
     {
         try
         {
@@ -133,7 +133,7 @@ namespace pjsettings
         }
     }
 
-    pj::ContainerNode &PjPugixmlDocument::getRootContainer() const
+    pj::ContainerNode &PugixmlDocument::getRootContainer() const
     {
         return _rootNode;
     }

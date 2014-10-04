@@ -37,7 +37,7 @@ SCENARIO("read json from string", "[jsoncpp]")
         "   ]\n"
         "}";
 
-    PjJsonCppDocument doc;
+    JsonCppDocument doc;
     try
     {
         doc.loadString(jsonString);
@@ -224,7 +224,7 @@ SCENARIO("jsoncpp read pjsip LogConfig", "[jsoncpp]")
             "        \"fileFlags\": 0\n"
             "    }\n"
             "}";
-        PjJsonCppDocument doc;
+        JsonCppDocument doc;
         doc.loadString(jsonString);
 
         LogConfig config;
@@ -246,7 +246,7 @@ SCENARIO("jsoncpp read pjsip LogConfig", "[jsoncpp]")
             "    }\n"
             "}";
 
-        PjJsonCppDocument doc;
+        JsonCppDocument doc;
         doc.loadString(xmlString);
 
         LogConfig config;
@@ -262,7 +262,7 @@ SCENARIO("jsoncpp from file", "[jsoncpp]")
 {
     const char *filename = "test-config-jsoncpp.json";
 
-    PjJsonCppDocument doc;
+    JsonCppDocument doc;
     doc.loadFile(filename);
 
     LogConfig config;
@@ -274,7 +274,7 @@ SCENARIO("jsoncpp from file", "[jsoncpp]")
 }
 
 
-bool contains_string(PjJsonCppDocument &doc, const std::string &search)
+bool contains_string(JsonCppDocument &doc, const std::string &search)
 {
     std::string result = doc.saveString();
     bool expression = result.find(search) != std::string::npos;
@@ -287,7 +287,7 @@ bool contains_string(PjJsonCppDocument &doc, const std::string &search)
 
 SCENARIO("jsoncpp to string", "[jsoncpp]")
 {
-    PjJsonCppDocument doc(true);
+    JsonCppDocument doc(true);
 
     SECTION("write simple data types")
     {
@@ -463,7 +463,7 @@ SCENARIO("jsoncpp write pjsip LogConfig", "[jsoncpp]")
     config.consoleLevel = 1;
     config.level = 2;
 
-    PjJsonCppDocument doc;
+    JsonCppDocument doc;
     doc.writeObject(config);
 
     SECTION("write to string")

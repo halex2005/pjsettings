@@ -30,10 +30,10 @@
 
 namespace pjsettings
 {
-    class PjPugixmlDocument : public pj::PersistentDocument
+    class PugixmlDocument : public pj::PersistentDocument
     {
     public:
-        PjPugixmlDocument();
+        PugixmlDocument();
         virtual void loadFile(const std::string &filename) throw(pj::Error);
         virtual void loadString(const std::string &input) throw(pj::Error);
         virtual void saveFile(const std::string &filename) throw(pj::Error);

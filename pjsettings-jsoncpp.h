@@ -30,10 +30,10 @@
 
 namespace pjsettings
 {
-    class PjJsonCppDocument : public pj::PersistentDocument
+    class JsonCppDocument : public pj::PersistentDocument
     {
     public:
-        PjJsonCppDocument(bool notStyledOutputOnWriting = false);
+        JsonCppDocument(bool notStyledOutputOnWriting = false);
         virtual void loadFile(const std::string &filename) throw(pj::Error);
         virtual void loadString(const std::string &input) throw(pj::Error);
         virtual void saveFile(const std::string &filename) throw(pj::Error);

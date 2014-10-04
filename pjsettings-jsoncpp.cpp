@@ -64,7 +64,7 @@ namespace pjsettings
         &jsoncppNode_writeNewArray
     };
 
-    PjJsonCppDocument::PjJsonCppDocument(bool notStyledOutputOnWriting)
+    JsonCppDocument::JsonCppDocument(bool notStyledOutputOnWriting)
         : _document(objectValue)
         , _rootNode()
         , _notStyledOutputOnWriting(notStyledOutputOnWriting)
@@ -72,7 +72,7 @@ namespace pjsettings
         initRoot();
     }
 
-    void PjJsonCppDocument::initRoot()
+    void JsonCppDocument::initRoot()
     {
         Value &rootElement = _document;
         _rootNode.op = &jsoncpp_op;
@@ -81,7 +81,7 @@ namespace pjsettings
         _rootNode.data.data2 = NULL;
     }
 
-    void PjJsonCppDocument::loadFile(const std::string &filename) throw(pj::Error)
+    void JsonCppDocument::loadFile(const std::string &filename) throw(pj::Error)
     {
         std::ifstream input(filename.c_str(), std::ifstream::binary);
         Json::Reader reader;
@@ -93,7 +93,7 @@ namespace pjsettings
         initRoot();
     }
 
-    void PjJsonCppDocument::loadString(const std::string &input) throw(pj::Error)
+    void JsonCppDocument::loadString(const std::string &input) throw(pj::Error)
     {
         Json::Reader reader;
         bool parsedSuccessfully = reader.parse(input, _document);
@@ -104,7 +104,7 @@ namespace pjsettings
         initRoot();
     }
 
-    void PjJsonCppDocument::saveFile(const std::string &filename) throw(pj::Error)
+    void JsonCppDocument::saveFile(const std::string &filename) throw(pj::Error)
     {
         try
         {
@@ -127,7 +127,7 @@ namespace pjsettings
         }
     }
 
-    std::string PjJsonCppDocument::saveString() throw(pj::Error)
+    std::string JsonCppDocument::saveString() throw(pj::Error)
     {
         try
         {
@@ -150,7 +150,7 @@ namespace pjsettings
         }
     }
 
-    pj::ContainerNode &PjJsonCppDocument::getRootContainer() const
+    pj::ContainerNode &JsonCppDocument::getRootContainer() const
     {
         return _rootNode;
     }

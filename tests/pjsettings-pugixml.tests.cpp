@@ -50,7 +50,7 @@ SCENARIO("pugixml from string", "[pugixml]")
         "       </vector>\n"
         "   </arrayOfStringVectors>\n"
         "</root>";
-    PjPugixmlDocument doc;
+    PugixmlDocument doc;
     try
     {
         doc.loadString(xmlString);
@@ -238,7 +238,7 @@ SCENARIO("pugixml read pjsip LogConfig", "[pugixml]")
             "        >"
             "    </LogConfig>"
             "</root>";
-        PjPugixmlDocument doc;
+        PugixmlDocument doc;
         doc.loadString(xmlString);
 
         LogConfig config;
@@ -261,7 +261,7 @@ SCENARIO("pugixml read pjsip LogConfig", "[pugixml]")
             "    </LogConfig>\n"
             "</root>";
 
-        PjPugixmlDocument doc;
+        PugixmlDocument doc;
         doc.loadString(xmlString);
 
         LogConfig config;
@@ -277,7 +277,7 @@ SCENARIO("pugixml from file", "[pugixml]")
 {
     const char *filename = "test-config-pugixml.xml";
 
-    PjPugixmlDocument doc;
+    PugixmlDocument doc;
     doc.loadFile(filename);
 
     LogConfig config;
@@ -289,7 +289,7 @@ SCENARIO("pugixml from file", "[pugixml]")
 }
 
 
-bool contains_string(PjPugixmlDocument &doc, const std::string &search)
+bool contains_string(PugixmlDocument &doc, const std::string &search)
 {
     std::string result = doc.saveString();
     bool expression = result.find(search) != std::string::npos;
@@ -302,7 +302,7 @@ bool contains_string(PjPugixmlDocument &doc, const std::string &search)
 
 SCENARIO("pugixml to string", "[pugixml]")
 {
-    PjPugixmlDocument doc;
+    PugixmlDocument doc;
 
     SECTION("write simple data types")
     {
@@ -478,6 +478,32 @@ SCENARIO("pugixml to string", "[pugixml]")
             CHECK(contains_string(doc, "</subArray>"));
             CHECK(contains_string(doc, "<item>20</item>"));
         }
+
+        SECTION("write multiple values to array")
+        {
+            std::vector<int> values;
+            values.push_back(1);
+            values.push_back(2);
+            for (int i = 0; i < values.size(); ++i)
+            {
+                NODE_WRITE_INT(arrayNode, values[i]);
+            }
+            CHECK(contains_string(doc, "<item>1</item>"));
+            CHECK(contains_string(doc, "<item>2</item>"));
+        }
+
+        SECTION("write multiple objects to array")
+        {
+            std::vector<SimpleClass> values;
+            values.push_back(SimpleClass("simple", 1));
+            values.push_back(SimpleClass("simple", 2));
+            for (int i = 0; i < values.size(); ++i)
+            {
+                NODE_WRITE_OBJ(arrayNode, values[i]);
+            }
+            CHECK(contains_string(doc, "<simple intValue=\"1\""));
+            CHECK(contains_string(doc, "<simple intValue=\"2\""));
+        }
     }
 }
 
@@ -488,7 +514,7 @@ SCENARIO("pugixml write pjsip LogConfig", "[pugixml]")
     config.consoleLevel = 1;
     config.level = 2;
 
-    PjPugixmlDocument doc;
+    PugixmlDocument doc;
     doc.writeObject(config);
 
     SECTION("write to string")
