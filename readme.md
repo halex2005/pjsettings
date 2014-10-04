@@ -41,71 +41,42 @@ or you can have just small part of fields, and can reorder them on your own:
 }
 ```
 
+Same xml document will look as
+
+```xml
+<?xml version="1.0"?>
+<root>
+    <LogConfig filename="pjsip.log"
+               level="5"
+               consolelevel="4" />
+</root>
+```
+
+For more details, please read
+
+- [jsoncpp pjsettings features](pjsettings-jsoncpp.md)
+- [pugixml pjsettings features](pjsettings-pugixml.md)
+
 Third-party libraries
 ---------------------
 
 This library use great libraries to work well (in alphabetical order):
 
-- [catch](https://github.com/philsquared/Catch) by Two Blue Cubes Ltd. for unit testing
-- [jsoncpp](https://github.com/open-source-parsers/jsoncpp) by Baptiste Lepilleur for json backend
+- [catch by Two Blue Cubes Ltd.](https://github.com/philsquared/Catch) for unit testing
+- [jsoncpp by Baptiste Lepilleur](https://github.com/open-source-parsers/jsoncpp) for json backend
 - [pjsip](http://www.pjsip.org/) by Benny Prijono and [Teluu Inc.](http://www.teluu.com) for persistent APIs
-- [pugixml](http://pugixml.org/) by Arseny Kapoulkine (MIT license) for xml backend
-
-Usage
------
-
-### XML-based configuration
-
-You can use class pjsettings::PjPugixmlDocument to read xml configuration:
-
-```c++
-pjsettings::PjPugixmlDocument doc;
-try
-{
-    doc.loadFile("config.xml");
-}
-catch (pj::Error &err)
-{
-    std::cerr << err.info(true) << std::endl;
-    throw;
-}
-```
-
-After the document is successfully loaded, it is ready to read persistent objects.
-You can use document in almost in all cases where you can use [pj::JsonDocument class](http://www.pjsip.org/docs/book-latest/html/intro_pjsua2.html#objects-persistence).
-For example, you can read [pj::EpConfig (endpoint configuration class)](http://www.pjsip.org/docs/book-latest/html/endpoint.html#endpoint-configurations):
-
-```c++
-pj::EpConfig config;
-doc.readObject(config);
-```
-
-### json-based configuration
-
-You can use class pjsettings::PjJsonCppDocument to read json configuration:
-
-```c++
-pjsettings::PjPugixmlDocument doc;
-try
-{
-    doc.loadFile("config.xml");
-}
-catch (pj::Error &err)
-{
-    std::cerr << err.info(true) << std::endl;
-    throw;
-}
-```
-
-Using of document class for reading persistent objects is same as for pjsettings::PjPugixmlDocument and pj::JsonDocument.
+- [pugixml by Arseny Kapoulkine](http://pugixml.org/) for xml backend
 
 License
 -------
 
-This library is distributed with same license as for [PJSIP](http://www.pjsip.org/licensing.htm):
+PJSettings library is distributed under [MIT license](COPYING)
 
-- [GPL v2](COPYING) or above.
-- Alternatively, if you bought [proprietary PJSIP license from Teluu Inc.](http://www.pjsip.org/licensing.htm), you can use this library with conditions of that proprietary license. Please, ask [licensing@teluu.com](licensing@teluu.com) for license information (I am not an employee of Teluu Inc.).
+Copyright (C) 2014, by [halex2005](mailto:akharlov@gmail.com)
+Report bugs and download new versions at https://github.com/halex2005/pjsettings
+
+Note that PJSettings library is built on to of PJSUA2 subset of PJSIP library.
+Please, [look at PJSIP license options](http://www.pjsip.org/licensing.htm) if you would use PJSettings library.
 
 [![PayPal donate button](http://img.shields.io/paypal/donate.png?color=yellow)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DNYQXBLEV475C "Donate once-off to this project using Paypal")
 [![Gratipay donate button](http://img.shields.io/gratipay/halex2005.svg)](https://gratipay.com/halex2005/ "Donate weekly to this project using Gratipay")
