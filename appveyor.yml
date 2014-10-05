@@ -16,6 +16,9 @@ install:
   - if "%PLATFORM%" == "x86" set PLATFORM=Win32
   - git clone https://github.com/halex2005/pjproject.git %PJSIP_ROOT%
   - set
+  - dir c:\Libraries\boost
+  - dir c:\Libraries\boost\stage
+  - dir c:\Libraries\boost\stage\lib
 #  - cd %PJSIP_ROOT%
 #  - msbuild pjproject-v120.sln /t:libpjproject
   - mkdir "%PJSETTINGS_ROOT%\tmp"
