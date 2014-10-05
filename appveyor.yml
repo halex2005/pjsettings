@@ -7,7 +7,7 @@ environment:
   PJSETTINGS_ROOT: c:\projects\pjsettings
 platform:
   - x86
-  - x64
+#  - x64
 configuration:
   - Debug
   - Release
