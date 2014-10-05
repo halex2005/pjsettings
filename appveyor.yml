@@ -23,4 +23,4 @@ install:
   - cd "%PJSETTINGS_ROOT%\tmp" && cmake .. -G %CMAKE_GENERATOR%
   - dir "%PJSETTINGS_ROOT%\tmp"
 build:
-  project: c:\projects\pjsettings\tmp\Project.sln
+  project: c:\projects\pjsettings\tmp\tests\test-pjsettings.vcxproj
