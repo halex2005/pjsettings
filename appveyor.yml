@@ -11,6 +11,7 @@ configuration:
   - Debug
   - Release
 install:
+  - if "%PLATFORM%" == "x86" set PLATFORM=Win32
   - git clone https://github.com/halex2005/pjproject.git %PJSIP_ROOT%
   - set
   - pushd %PJSIP_ROOT%
