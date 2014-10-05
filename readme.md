@@ -1,9 +1,9 @@
 PJSettings
 ==========
 
-Linux: [![Build Status](https://travis-ci.org/halex2005/pjsettings.svg?branch=master)](https://travis-ci.org/halex2005/pjsettings)
-
-Windows: [![Build status](https://ci.appveyor.com/api/projects/status/ehy5ody4geoirtgd)](https://ci.appveyor.com/project/halex2005/pjsettings)
+Platform | Linux | Windows
+---------|-------|--------
+Build status | [![Build Status](https://travis-ci.org/halex2005/pjsettings.svg?branch=master)](https://travis-ci.org/halex2005/pjsettings) | [![Build status](https://ci.appveyor.com/api/projects/status/ehy5ody4geoirtgd)](https://ci.appveyor.com/project/halex2005/pjsettings)
 
 PJSettings is a small library that extends a PJSIP persistent document interfaces to support:
 
