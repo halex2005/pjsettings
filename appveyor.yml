@@ -14,10 +14,9 @@ install:
   - if "%PLATFORM%" == "x86" set PLATFORM=Win32
   - git clone https://github.com/halex2005/pjproject.git %PJSIP_ROOT%
   - set
-  - cd %PJSIP_ROOT%
-  - msbuild pjproject-v120.sln /t:libpjproject
+#  - cd %PJSIP_ROOT%
+#  - msbuild pjproject-v120.sln /t:libpjproject
   - mkdir %PJSETTINGS_ROOT%\tmp
-  - cd %PJSETTINGS_ROOT%\tmp
-  - if "%PLATFORM%"=="x64" cmake .. -G "Visual Studio 12 Win64" else cmake .. -G "Visual Studio 12"
+  - cd %PJSETTINGS_ROOT%\tmp && if "%PLATFORM%"=="x64" cmake .. -G "Visual Studio 12 Win64" else cmake .. -G "Visual Studio 12"
 build:
   project: c:\projects\pjsettings\tmp\Project.sln
