@@ -64,10 +64,11 @@ elseif(WIN32)
         ${PJSIP_PJNATH_INCLUDE_DIR}
         ${PJSIP_PJSIP_INCLUDE_DIR}
     )
+    include_directories(${PJSIP_INCLUDE_DIR})
 
-    set (PJSIP_LIBRARY_DIR "${PJSIP_ROOT_DIR}/lib")
     set (PJSIP_LIBRARIES "libpjproject-\$(Platform)-\$(PlatformToolset)-\$(Configuration)-Dynamic.lib")
     set (PJSIP_STATIC_LIBRARIES ${PJSIP_LIBRARIES} Ws2_32.lib)
+    set (PJSIP_LIBRARY_DIR "${PJSIP_ROOT_DIR}/lib")
     link_directories(${PJSIP_LIBRARY_DIR})
 endif()
 
