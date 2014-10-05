@@ -2,6 +2,7 @@ version: 1.0.{build}
 skip_tags: true
 clone_folder: c:\projects\pjsettings
 environment:
+  BOOST_ROOT: c:\Libraries\boost
   PJSIP_ROOT: c:\projects\pjproject
   PJSETTINGS_ROOT: c:\projects\pjsettings
 platform:
@@ -16,9 +17,7 @@ install:
   - if "%PLATFORM%" == "x86" set PLATFORM=Win32
   - git clone https://github.com/halex2005/pjproject.git %PJSIP_ROOT%
   - set
-  - dir c:\Libraries\boost
-  - dir c:\Libraries\boost\stage
-  - dir c:\Libraries\boost\stage\lib
+  - dir c:\Libraries
 #  - cd %PJSIP_ROOT%
 #  - msbuild pjproject-v120.sln /t:libpjproject
   - mkdir "%PJSETTINGS_ROOT%\tmp"
