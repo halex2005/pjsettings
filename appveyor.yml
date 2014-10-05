@@ -13,9 +13,11 @@ configuration:
 install:
   - git clone https://github.com/halex2005/pjproject.git %PJSIP_ROOT%
   - set
+  - pushd %PJSIP_ROOT%
+  - msbuild pjproject.sln /t:pjproject
+  - popd
   - mkdir %PJSETTINGS_ROOT%\tmp
   - pushd %PJSETTINGS_ROOT%\tmp
   - if "%%"=="x64" cmake .. -G "Visual Studio 12 Win64" else cmake .. -G "Visual Studio 12"
 build:
-  project: c:\projects\pjproject\pjproject-v120.sln
   project: c:\projects\pjsettings\tmp\Project.sln
