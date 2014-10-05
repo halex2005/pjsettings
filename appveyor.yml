@@ -18,6 +18,6 @@ install:
   - msbuild pjproject-v120.sln /t:libpjproject
   - mkdir %PJSETTINGS_ROOT%\tmp
   - cd %PJSETTINGS_ROOT%\tmp
-  - if "%%"=="x64" cmake .. -G "Visual Studio 12 Win64" else cmake .. -G "Visual Studio 12"
+  - if "%PLATFORM%"=="x64" cmake .. -G "Visual Studio 12 Win64" else cmake .. -G "Visual Studio 12"
 build:
   project: c:\projects\pjsettings\tmp\Project.sln
