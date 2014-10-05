@@ -514,7 +514,7 @@ SCENARIO("pugixml write pjsip LogConfig", "[pugixml]")
     config.consoleLevel = 1;
     config.level = 2;
 
-    PugixmlDocument doc;
+    PugixmlDocument doc(pugi::format_indent);
     doc.writeObject(config);
 
     SECTION("write to string")
@@ -528,6 +528,7 @@ SCENARIO("pugixml write pjsip LogConfig", "[pugixml]")
         CHECK(savedString.find("filename=\"pjsip.log\"") != npos);
         CHECK(savedString.find("consoleLevel=\"1\"") != npos);
         CHECK(savedString.find("level=\"2\"") != npos);
+        std::cout << savedString << std::endl;
     }
 
     SECTION("write to file")

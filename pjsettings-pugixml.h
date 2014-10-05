@@ -33,7 +33,7 @@ namespace pjsettings
     class PugixmlDocument : public pj::PersistentDocument
     {
     public:
-        PugixmlDocument();
+        PugixmlDocument(unsigned int flags = pugi::format_default);
         virtual void loadFile(const std::string &filename) throw(pj::Error);
         virtual void loadString(const std::string &input) throw(pj::Error);
         virtual void saveFile(const std::string &filename) throw(pj::Error);
@@ -42,6 +42,7 @@ namespace pjsettings
     private:
         void initRoot();
         pugi::xml_document _document;
+        unsigned int _flags;
         mutable pj::ContainerNode _rootNode;
     };
 

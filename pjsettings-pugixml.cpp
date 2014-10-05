@@ -62,9 +62,10 @@ namespace pjsettings
         &pugixmlNode_writeNewArray
     };
 
-    PugixmlDocument::PugixmlDocument()
+    PugixmlDocument::PugixmlDocument(unsigned int flags)
         : _document()
         , _rootNode()
+        , _flags(flags)
     {
         _document.root().append_child("root");
         initRoot();
@@ -106,7 +107,7 @@ namespace pjsettings
             _document.save_file(
                 filename.c_str(),
                 "    ",
-                pugi::format_default,
+                _flags,
                 pugi::encoding_utf8);
         }
         catch (std::exception &ex)
@@ -123,7 +124,7 @@ namespace pjsettings
             _document.save(
                 result,
                 "    ",
-                pugi::format_default,
+                _flags,
                 pugi::encoding_utf8);
             return result.str();
         }
