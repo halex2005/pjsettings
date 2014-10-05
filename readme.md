@@ -73,7 +73,7 @@ License
 
 PJSettings library is distributed under [MIT license](COPYING)
 
-Copyright (C) 2014, by [halex2005](mailto:akharlov@gmail.com)
+Copyright (C) 2014, by [halex2005](mailto:akharlov@gmail.com) <br/>
 Report bugs and download new versions at https://github.com/halex2005/pjsettings
 
 Note that PJSettings library is built on to of PJSUA2 subset of PJSIP library.
