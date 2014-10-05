@@ -12,14 +12,13 @@ configuration:
   - Debug
   - Release
 install:
+  - set
   - if "%PLATFORM%" == "x86" set CMAKE_GENERATOR="Visual Studio 12"
   - if "%PLATFORM%" == "x64" set CMAKE_GENERATOR="Visual Studio 12 Win64"
   - if "%PLATFORM%" == "x86" set PLATFORM=Win32
   - git clone https://github.com/halex2005/pjproject.git %PJSIP_ROOT%
-  - set
-  - dir c:\Libraries
-#  - cd %PJSIP_ROOT%
-#  - msbuild pjproject-v120.sln /t:libpjproject
+  - cd %PJSIP_ROOT%
+  - msbuild pjproject-v120.sln /t:libpjproject
   - mkdir "%PJSETTINGS_ROOT%\tmp"
   - cd "%PJSETTINGS_ROOT%\tmp" && cmake .. -G %CMAKE_GENERATOR%
   - dir "%PJSETTINGS_ROOT%\tmp"
