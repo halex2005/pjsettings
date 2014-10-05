@@ -19,7 +19,7 @@ install:
 #  - cd %PJSIP_ROOT%
 #  - msbuild pjproject-v120.sln /t:libpjproject
   - mkdir "%PJSETTINGS_ROOT%\tmp"
-  - cd "%PJSETTINGS_ROOT%\tmp" && cmake .. -G "%CMAKE_GENERATOR%"
+  - cd "%PJSETTINGS_ROOT%\tmp" && cmake .. -G %CMAKE_GENERATOR%
   - dir "%PJSETTINGS_ROOT%\tmp"
 build:
   project: c:\projects\pjsettings\tmp\Project.sln
