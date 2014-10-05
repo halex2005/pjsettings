@@ -14,7 +14,7 @@ install:
   - git clone https://github.com/halex2005/pjproject.git %PJSIP_ROOT%
   - set
   - pushd %PJSIP_ROOT%
-  - msbuild pjproject.sln /t:pjproject
+  - msbuild pjproject-v120.sln /t:pjproject
   - popd
   - mkdir %PJSETTINGS_ROOT%\tmp
   - pushd %PJSETTINGS_ROOT%\tmp
