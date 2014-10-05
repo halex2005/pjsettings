@@ -9,8 +9,9 @@ PJSettings is a small library that extends a PJSIP persistent document interface
 - read/write json document non-serially, based on [jsoncpp backend](https://github.com/open-source-parsers/jsoncpp)
 
 Inspite PJSUA2 already has implementation for read/write json documents,
-PJSUA2 document is read and written serially, hence the order of reading
-must be the same as the order of writing.
+[PJSUA2 pj::JsonDocument](http://www.pjsip.org/docs/book-latest/html/reference.html#json-hpp)
+is read and written serially, hence the order of reading must be
+the same as the order of writing.
 
 This library provides classes capable reading of documents in non-serial way.
 
