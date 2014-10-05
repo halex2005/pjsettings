@@ -18,7 +18,7 @@ install:
   - if "%PLATFORM%" == "x86" set PLATFORM=Win32
   - git clone https://github.com/halex2005/pjproject.git %PJSIP_ROOT%
   - cd %PJSIP_ROOT%
-  - msbuild pjproject-v120.sln /t:libpjproject
+  - msbuild pjproject-v120.sln /t:libpjproject /p:Configuration=%Configuration%-Dynamic
   - mkdir "%PJSETTINGS_ROOT%\tmp"
   - cd "%PJSETTINGS_ROOT%\tmp" && cmake .. -G %CMAKE_GENERATOR%
   - dir "%PJSETTINGS_ROOT%\tmp"
