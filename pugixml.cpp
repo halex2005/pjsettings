@@ -3189,13 +3189,22 @@ PUGI__NS_BEGIN
 		while (*s);
 	}
 
-	PUGI__FN void node_output_attributes(xml_buffered_writer& writer, const xml_node& node, unsigned int flags)
+	PUGI__FN void node_output_attributes(xml_buffered_writer& writer, const xml_node& node, const char_t* indent, unsigned int flags, unsigned int depth)
 	{
 		const char_t* default_name = PUGIXML_TEXT(":anonymous");
 
+		bool eachAttributeOnNewLine = (flags & format_indent) && (flags & format_each_attribute_on_new_line) && (flags & format_raw) == 0;
 		for (xml_attribute a = node.first_attribute(); a; a = a.next_attribute())
 		{
-			writer.write(' ');
+			if (eachAttributeOnNewLine)
+			{
+				writer.write('\n');
+				for (unsigned int i = 0; i < depth; ++i) writer.write(indent);
+			}
+			else
+			{
+				writer.write(' ');
+			}
 			writer.write(a.name()[0] ? a.name() : default_name);
 			writer.write('=', '"');
 
@@ -3228,7 +3237,11 @@ PUGI__NS_BEGIN
 			writer.write('<');
 			writer.write(name);
 
-			node_output_attributes(writer, node, flags);
+			node_output_attributes(writer, node, indent, flags, depth+1);
+			bool closingBracketOnNewLine = (flags & format_indent)
+				&& (flags & format_each_attribute_on_new_line)
+				&& (flags & format_closing_bracket_on_new_line)
+				&& (flags & format_raw) == 0;
 
 			if (flags & format_raw)
 			{
@@ -3247,7 +3260,18 @@ PUGI__NS_BEGIN
 				}
 			}
 			else if (!node.first_child())
-				writer.write(' ', '/', '>', '\n');
+			{
+				if (node.first_attribute() && closingBracketOnNewLine)
+				{
+					writer.write('\n');
+					for (unsigned int i = 0; i < depth + 1; ++i) writer.write(indent);
+					writer.write('/', '>', '\n');
+				}
+				else
+				{
+					writer.write(' ', '/', '>', '\n');
+				}
+			}
 			else if (node.first_child() == node.last_child() && (node.first_child().type() == node_pcdata || node.first_child().type() == node_cdata))
 			{
 				writer.write('>');
@@ -3263,6 +3287,11 @@ PUGI__NS_BEGIN
 			}
 			else
 			{
+				if (node.first_attribute() && closingBracketOnNewLine)
+				{
+					writer.write('\n');
+					for (unsigned int i = 0; i < depth+1; ++i) writer.write(indent);
+				}
 				writer.write('>', '\n');
 				
 				for (xml_node n = node.first_child(); n; n = n.next_sibling())
@@ -3303,7 +3332,7 @@ PUGI__NS_BEGIN
 
 			if (node.type() == node_declaration)
 			{
-				node_output_attributes(writer, node, flags);
+				node_output_attributes(writer, node, indent, flags & ~format_each_attribute_on_new_line, depth+1);
 			}
 			else if (node.value()[0])
 			{

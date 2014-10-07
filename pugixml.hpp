@@ -203,6 +203,14 @@ namespace pugi
 	// Open file using text mode in xml_document::save_file. This enables special character (i.e. new-line) conversions on some systems. This flag is off by default.
 	const unsigned int format_save_file_text = 0x20;
 
+	// Set each attribute to new line
+	const unsigned int format_each_attribute_on_new_line = 0x40;
+	const unsigned int format_indent_attribute = format_indent | format_each_attribute_on_new_line;
+
+	// Set each attribute to new line
+	const unsigned int format_closing_bracket_on_new_line = 0x80;
+	const unsigned int format_indent_full = format_indent | format_each_attribute_on_new_line | format_closing_bracket_on_new_line;
+
 	// The default set of formatting flags.
 	// Nodes are indented depending on their depth in DOM tree, a default declaration is output if document has none.
 	const unsigned int format_default = format_indent;
