@@ -32,29 +32,24 @@ string PersistentDocument::unreadName() const throw(Error)
     return getRootContainer().unreadName();
 }
 
-int PersistentDocument::readInt(const string &name) const throw(Error)
+void PersistentDocument::readNumber(const string &name, double &value) const throw(Error)
 {
-    return (int)getRootContainer().readNumber(name);
+    return getRootContainer().readNumber(name, value);
 }
 
-double PersistentDocument::readNumber(const string &name) const throw(Error)
+void PersistentDocument::readBool(const string &name, bool &value) const throw(Error)
 {
-    return getRootContainer().readNumber(name);
+    return getRootContainer().readBool(name, value);
 }
 
-bool PersistentDocument::readBool(const string &name) const throw(Error)
+void PersistentDocument::readString(const string &name, string &value) const throw(Error)
 {
-    return getRootContainer().readBool(name);
+    return getRootContainer().readString(name, value);
 }
 
-string PersistentDocument::readString(const string &name) const throw(Error)
+void PersistentDocument::readStringVector(const string &name, StringVector &value) const throw(Error)
 {
-    return getRootContainer().readString(name);
-}
-
-StringVector PersistentDocument::readStringVector(const string &name) const throw(Error)
-{
-    return getRootContainer().readStringVector(name);
+    return getRootContainer().readStringVector(name, value);
 }
 
 void PersistentDocument::readObject(PersistentObject &obj) const throw(Error)
@@ -124,29 +119,24 @@ string ContainerNode::unreadName() const throw(Error)
     return op->unreadName(this);
 }
 
-int ContainerNode::readInt(const string &name) const throw(Error)
+void ContainerNode::readNumber(const string &name, double &value) const throw(Error)
 {
-    return (int)op->readNumber(this, name);
+    return op->readNumber(this, name, value);
 }
 
-double ContainerNode::readNumber(const string &name) const throw(Error)
+void ContainerNode::readBool(const string &name, bool &value) const throw(Error)
 {
-    return op->readNumber(this, name);
+    return op->readBool(this, name, value);
 }
 
-bool ContainerNode::readBool(const string &name) const throw(Error)
+void ContainerNode::readString(const string &name, string &value) const throw(Error)
 {
-    return op->readBool(this, name);
+    return op->readString(this, name, value);
 }
 
-string ContainerNode::readString(const string &name) const throw(Error)
+void ContainerNode::readStringVector(const string &name, StringVector &value) const throw(Error)
 {
-    return op->readString(this, name);
-}
-
-StringVector ContainerNode::readStringVector(const string &name) const throw(Error)
-{
-    return op->readStringVector(this, name);
+    return op->readStringVector(this, name, value);
 }
 
 void ContainerNode::readObject(PersistentObject &obj) const throw(Error)

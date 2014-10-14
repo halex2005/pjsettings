@@ -99,6 +99,62 @@ SCENARIO("read json from string", "[jsoncpp]")
         }
     }
 
+    SECTION("read simple data types - values not exists")
+    {
+        ContainerNode &node = doc.getRootContainer();
+
+        SECTION("read integer")
+        {
+            int intValueNotExists = 15;
+            NODE_READ_INT(node, intValueNotExists);
+            CHECK(15 == intValueNotExists);
+        }
+
+        SECTION("read double")
+        {
+            double doubleValueNotExists = 3.5;
+            NODE_READ_FLOAT(node, doubleValueNotExists);
+            CHECK(3.5 == doubleValueNotExists);
+        }
+
+        SECTION("read string")
+        {
+            std::string stringValueNotExists = "default string";
+            NODE_READ_STRING(node, stringValueNotExists);
+            CHECK("default string" == stringValueNotExists);
+        }
+
+        WHEN("read bool")
+        {
+            THEN("true bool")
+            {
+                bool trueBoolNotExists = true;
+                NODE_READ_BOOL(node, trueBoolNotExists);
+                CHECK(true == trueBoolNotExists);
+            }
+
+            THEN("false bool")
+            {
+                bool falseBoolNotExists = false;
+                NODE_READ_BOOL(node, falseBoolNotExists);
+                CHECK(false == falseBoolNotExists);
+            }
+        }
+
+        SECTION("read string vector")
+        {
+            StringVector stringsArrayNotExists;
+            stringsArrayNotExists.push_back("1");
+            stringsArrayNotExists.push_back("2");
+            stringsArrayNotExists.push_back("3");
+            NODE_READ_STRINGV(node, stringsArrayNotExists);
+            REQUIRE(3 == stringsArrayNotExists.size());
+            CHECK("1" == stringsArrayNotExists[0]);
+            CHECK("2" == stringsArrayNotExists[1]);
+            CHECK("3" == stringsArrayNotExists[2]);
+        }
+    }
+
     SECTION("read from array")
     {
         SECTION("read array of objects")

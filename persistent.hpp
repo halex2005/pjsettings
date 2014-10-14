@@ -69,6 +69,13 @@ public:
     virtual void writeObject(ContainerNode &node) const throw(Error) = 0;
 };
 
+#define PJSETTINGS_READ_NUMBER_IMPLEMENTATION(funcName, intType) \
+    void         funcName(const string &name, intType &value) const throw(Error)\
+    {\
+        double temp = value;\
+        readNumber(name, temp);\
+        value = (intType)temp;\
+    }
 
 /**
  * This a the abstract base class for a persistent document. A document
@@ -164,7 +171,13 @@ public:
      *
      * @return      The value.
      */
-    int         readInt(const string &name="") const throw(Error);
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_int32_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_int16_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_int8_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_uint32_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_uint16_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_uint8_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, float)
 
     /**
      * Read a double value from the document and return the value.
@@ -177,7 +190,7 @@ public:
      *
      * @return      The value.
      */
-    double       readNumber(const string &name="") const throw(Error);
+    void       readNumber(const string &name, double &value) const throw(Error);
 
     /**
      * Read a boolean value from the container and return the value.
@@ -190,7 +203,7 @@ public:
      *
      * @return      The value.
      */
-    bool        readBool(const string &name="") const throw(Error);
+    void        readBool(const string &name, bool &value) const throw(Error);
 
     /**
      * Read a string value from the container and return the value.
@@ -203,7 +216,7 @@ public:
      *
      * @return      The value.
      */
-    string      readString(const string &name="") const throw(Error);
+    void      readString(const string &name, string &value) const throw(Error);
 
     /**
      * Read a string array from the container. This will throw Error
@@ -216,7 +229,42 @@ public:
      *
      * @return      The value.
      */
-    StringVector    readStringVector(const string &name="") const throw(Error);
+    void    readStringVector(const string &name, StringVector &value) const throw(Error);
+
+    bool         readBool(const string &name="") const throw(Error)
+    {
+        bool result = false;
+        readBool(name, result);
+        return result;
+    }
+
+    int          readInt(const string &name="") const throw(Error)
+    {
+        int result = 0;
+        readNumber(name, result);
+        return result;
+    }
+
+    double       readNumber(const string &name="") const throw(Error)
+    {
+        double result = 0;
+        readNumber(name, result);
+        return result;
+    }
+
+    string       readString(const string &name="") const throw(Error)
+    {
+        string result = "";
+        readString(name, result);
+        return result;
+    }
+
+    StringVector readStringVector(const string &name="") const throw(Error)
+    {
+        StringVector result;
+        readStringVector(name, result);
+        return result;
+    }
 
     /**
      * Read the specified object from the container. This is equal to
@@ -417,7 +465,13 @@ public:
      *
      * @return      The value.
      */
-    int         readInt(const string &name="") const throw(Error);
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_int32_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_int16_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_int8_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_uint32_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_uint16_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, pj_uint8_t)
+    PJSETTINGS_READ_NUMBER_IMPLEMENTATION(readNumber, float)
 
     /**
      * Read a number value from the document and return the value.
@@ -430,7 +484,7 @@ public:
      *
      * @return      The value.
      */
-    double       readNumber(const string &name="") const throw(Error);
+    void       readNumber(const string &name, double &value) const throw(Error);
 
     /**
      * Read a boolean value from the container and return the value.
@@ -443,7 +497,7 @@ public:
      *
      * @return      The value.
      */
-    bool        readBool(const string &name="") const throw(Error);
+    void        readBool(const string &name, bool &value) const throw(Error);
 
     /**
      * Read a string value from the container and return the value.
@@ -456,7 +510,7 @@ public:
      *
      * @return      The value.
      */
-    string      readString(const string &name="") const throw(Error);
+    void      readString(const string &name, string &value) const throw(Error);
 
     /**
      * Read a string array from the container. This will throw Error
@@ -469,7 +523,42 @@ public:
      *
      * @return      The value.
      */
-    StringVector    readStringVector(const string &name="") const throw(Error);
+    void    readStringVector(const string &name, StringVector &value) const throw(Error);
+
+    bool         readBool(const string &name="") const throw(Error)
+    {
+        bool result = false;
+        readBool(name, result);
+        return result;
+    }
+
+    int          readInt(const string &name="") const throw(Error)
+    {
+        int result = 0;
+        readNumber(name, result);
+        return result;
+    }
+
+    double       readNumber(const string &name="") const throw(Error)
+    {
+        double result = 0;
+        readNumber(name, result);
+        return result;
+    }
+
+    string       readString(const string &name="") const throw(Error)
+    {
+        string result = "";
+        readString(name, result);
+        return result;
+    }
+
+    StringVector readStringVector(const string &name="") const throw(Error)
+    {
+        StringVector result;
+        readStringVector(name, result);
+        return result;
+    }
 
     /**
      * Read the specified object from the container. This is equal to
@@ -589,10 +678,10 @@ struct container_node_op
 {
     bool            (*hasUnread)        (const ContainerNode*);
     string          (*unreadName)       (const ContainerNode*) throw(Error);
-    double          (*readNumber)       (const ContainerNode*, const string &name) throw(Error);
-    bool            (*readBool)         (const ContainerNode*, const string &name) throw(Error);
-    string          (*readString)       (const ContainerNode*, const string &name) throw(Error);
-    StringVector    (*readStringVector) (const ContainerNode*, const string &name) throw(Error);
+    void            (*readNumber)       (const ContainerNode*, const string &name, double &value) throw(Error);
+    void            (*readBool)         (const ContainerNode*, const string &name, bool &value) throw(Error);
+    void            (*readString)       (const ContainerNode*, const string &name, string &value) throw(Error);
+    void            (*readStringVector) (const ContainerNode*, const string &name, StringVector &value) throw(Error);
     ContainerNode   (*readContainer)    (const ContainerNode*, const string &name) throw(Error);
     ContainerNode   (*readArray)        (const ContainerNode*, const string &name) throw(Error);
     void            (*writeNumber)      (ContainerNode*, const string &name, double value) throw(Error);
@@ -606,14 +695,14 @@ struct container_node_op
 /*
  * Convenient macros.
  */
-#define NODE_READ_BOOL(node,item)      item = node.readBool(#item)
-#define NODE_READ_UNSIGNED(node,item)  item = (unsigned)node.readNumber(#item)
-#define NODE_READ_INT(node,item)       item = (int)node.readNumber(#item)
-#define NODE_READ_FLOAT(node,item)     item = (float)node.readNumber(#item)
-#define NODE_READ_DOUBLE(node,item)    item = node.readNumber(#item)
-#define NODE_READ_NUM_T(node,T,item)   item = (T)(int)node.readNumber(#item)
-#define NODE_READ_STRING(node,item)    item = node.readString(#item)
-#define NODE_READ_STRINGV(node,item)   item = node.readStringVector(#item)
+#define NODE_READ_BOOL(node,item)      node.readBool(#item, item)
+#define NODE_READ_UNSIGNED(node,item)  node.readNumber(#item, item)
+#define NODE_READ_INT(node,item)       node.readNumber(#item, item)
+#define NODE_READ_FLOAT(node,item)     node.readNumber(#item, item)
+#define NODE_READ_DOUBLE(node,item)    node.readNumber(#item, item)
+#define NODE_READ_NUM_T(node,T,item)   node.readNumber(#item, item)
+#define NODE_READ_STRING(node,item)    node.readString(#item, item)
+#define NODE_READ_STRINGV(node,item)   node.readStringVector(#item, item)
 #define NODE_READ_OBJ(node,item)       node.readObject(item)
 
 #define NODE_WRITE_BOOL(node,item)     node.writeBool(#item, item)

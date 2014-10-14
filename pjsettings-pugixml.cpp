@@ -30,20 +30,20 @@ namespace pjsettings
 {
 
     /* Pugixml node operations */
-    static bool          pugixmlNode_hasUnread(const ContainerNode*);
-    static string        pugixmlNode_unreadName(const ContainerNode*n) throw(Error);
-    static double        pugixmlNode_readNumber(const ContainerNode*, const string&) throw(Error);
-    static bool          pugixmlNode_readBool(const ContainerNode*, const string&) throw(Error);
-    static string        pugixmlNode_readString(const ContainerNode*, const string&) throw(Error);
-    static StringVector  pugixmlNode_readStringVector(const ContainerNode*, const string&) throw(Error);
-    static ContainerNode pugixmlNode_readContainer(const ContainerNode*, const string &) throw(Error);
-    static ContainerNode pugixmlNode_readArray(const ContainerNode*, const string &) throw(Error);
-    static void          pugixmlNode_writeNumber(ContainerNode*, const string &name, double num) throw(Error);
-    static void          pugixmlNode_writeBool(ContainerNode*, const string &name, bool value) throw(Error);
-    static void          pugixmlNode_writeString(ContainerNode*, const string &name, const string &value) throw(Error);
-    static void          pugixmlNode_writeStringVector(ContainerNode*, const string &name, const StringVector &value) throw(Error);
-    static ContainerNode pugixmlNode_writeNewContainer(ContainerNode*, const string &name) throw(Error);
-    static ContainerNode pugixmlNode_writeNewArray(ContainerNode*, const string &name) throw(Error);
+    static bool          pugixmlNode_hasUnread         (const ContainerNode*);
+    static string        pugixmlNode_unreadName        (const ContainerNode*n) throw(Error);
+    static void          pugixmlNode_readNumber        (const ContainerNode*, const string &name, double &value) throw(Error);
+    static void          pugixmlNode_readBool          (const ContainerNode*, const string &name, bool &value) throw(Error);
+    static void          pugixmlNode_readString        (const ContainerNode*, const string &name, string &value) throw(Error);
+    static void          pugixmlNode_readStringVector  (const ContainerNode*, const string &name, StringVector &value) throw(Error);
+    static ContainerNode pugixmlNode_readContainer     (const ContainerNode*, const string &) throw(Error);
+    static ContainerNode pugixmlNode_readArray         (const ContainerNode*, const string &) throw(Error);
+    static void          pugixmlNode_writeNumber       (ContainerNode*, const string &name, double num) throw(Error);
+    static void          pugixmlNode_writeBool         (ContainerNode*, const string &name, bool value) throw(Error);
+    static void          pugixmlNode_writeString       (ContainerNode*, const string &name, const string &value) throw(Error);
+    static void          pugixmlNode_writeStringVector (ContainerNode*, const string &name, const StringVector &value) throw(Error);
+    static ContainerNode pugixmlNode_writeNewContainer (ContainerNode*, const string &name) throw(Error);
+    static ContainerNode pugixmlNode_writeNewArray     (ContainerNode*, const string &name) throw(Error);
 
     static container_node_op pugixml_op = {
         &pugixmlNode_hasUnread,
@@ -176,7 +176,7 @@ namespace pjsettings
         }
     }
 
-    static double         pugixmlNode_readNumber(const ContainerNode *node, const string &name) throw(Error)
+    static void         pugixmlNode_readNumber(const ContainerNode *node, const string &name, double &value) throw(Error)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
         pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
@@ -184,16 +184,16 @@ namespace pjsettings
         {
             pugi::xml_node arrayIterator(arrayData);
             selectNextArrayElement(node, arrayIterator);
-            return arrayIterator.text().as_double(0.0);
+            value = arrayIterator.text().as_double(value);
         }
         else
         {
             pugi::xml_node element(data);
-            return element.attribute(name.c_str()).as_double(0.0);
+            value = element.attribute(name.c_str()).as_double(value);
         }
     }
 
-    static bool          pugixmlNode_readBool(const ContainerNode *node, const string &name) throw(Error)
+    static void          pugixmlNode_readBool(const ContainerNode *node, const string &name, bool &value) throw(Error)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
         pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
@@ -201,16 +201,16 @@ namespace pjsettings
         {
             pugi::xml_node arrayIterator(arrayData);
             selectNextArrayElement(node, arrayIterator);
-            return arrayIterator.text().as_bool(false);
+            value = arrayIterator.text().as_bool(value);
         }
         else
         {
             pugi::xml_node element(data);
-            return element.attribute(name.c_str()).as_bool(false);
+            value = element.attribute(name.c_str()).as_bool(value);
         }
     }
 
-    static string        pugixmlNode_readString(const ContainerNode *node, const string &name) throw(Error)
+    static void        pugixmlNode_readString(const ContainerNode *node, const string &name, string &value) throw(Error)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
         pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
@@ -218,16 +218,16 @@ namespace pjsettings
         {
             pugi::xml_node arrayIterator(arrayData);
             selectNextArrayElement(node, arrayIterator);
-            return arrayIterator.text().as_string("");
+            value = arrayIterator.text().as_string(value.c_str());
         }
         else
         {
             pugi::xml_node element(data);
-            return element.attribute(name.c_str()).as_string("");
+            value = element.attribute(name.c_str()).as_string(value.c_str());
         }
     }
 
-    static StringVector  pugixmlNode_readStringVector(const ContainerNode *node, const string &name) throw(Error)
+    static void  pugixmlNode_readStringVector(const ContainerNode *node, const string &name, StringVector &value) throw(Error)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
         pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
@@ -244,13 +244,16 @@ namespace pjsettings
             stringVectorNode = element.child(name.c_str());
         }
 
+        if (!stringVectorNode)
+            return;
+
         StringVector result;
         for (pugi::xml_node item = stringVectorNode.first_child(); item; item = item.next_sibling())
         {
             const char *stringItem = item.text().as_string("");
             result.push_back(stringItem);
         }
-        return result;
+        value = result;
     }
 
     static ContainerNode pugixmlNode_readContainer(const ContainerNode *node, const string &name) throw(Error)

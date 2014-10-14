@@ -32,20 +32,20 @@ namespace pjsettings
 {
 
     /* Pugixml node operations */
-    static bool          jsoncppNode_hasUnread(const ContainerNode*);
-    static string        jsoncppNode_unreadName(const ContainerNode*n) throw(Error);
-    static double        jsoncppNode_readNumber(const ContainerNode*, const string&) throw(Error);
-    static bool          jsoncppNode_readBool(const ContainerNode*, const string&) throw(Error);
-    static string        jsoncppNode_readString(const ContainerNode*, const string&) throw(Error);
-    static StringVector  jsoncppNode_readStringVector(const ContainerNode*, const string&) throw(Error);
-    static ContainerNode jsoncppNode_readContainer(const ContainerNode*, const string &) throw(Error);
-    static ContainerNode jsoncppNode_readArray(const ContainerNode*, const string &) throw(Error);
-    static void          jsoncppNode_writeNumber(ContainerNode*, const string &name, double um) throw(Error);
-    static void          jsoncppNode_writeBool(ContainerNode*, const string &name, bool value) throw(Error);
-    static void          jsoncppNode_writeString(ContainerNode*, const string &name, const string &value) throw(Error);
-    static void          jsoncppNode_writeStringVector(ContainerNode*, const string &name, const StringVector &value) throw(Error);
-    static ContainerNode jsoncppNode_writeNewContainer(ContainerNode*, const string &name) throw(Error);
-    static ContainerNode jsoncppNode_writeNewArray(ContainerNode*, const string &name) throw(Error);
+    static bool          jsoncppNode_hasUnread         (const ContainerNode*);
+    static string        jsoncppNode_unreadName        (const ContainerNode*n) throw(Error);
+    static void          jsoncppNode_readNumber        (const ContainerNode*, const string &name, double &value) throw(Error);
+    static void          jsoncppNode_readBool          (const ContainerNode*, const string &name, bool &value) throw(Error);
+    static void          jsoncppNode_readString        (const ContainerNode*, const string &name, string &value) throw(Error);
+    static void          jsoncppNode_readStringVector  (const ContainerNode*, const string &name, StringVector &value) throw(Error);
+    static ContainerNode jsoncppNode_readContainer     (const ContainerNode*, const string &) throw(Error);
+    static ContainerNode jsoncppNode_readArray         (const ContainerNode*, const string &) throw(Error);
+    static void          jsoncppNode_writeNumber       (ContainerNode*, const string &name, double um) throw(Error);
+    static void          jsoncppNode_writeBool         (ContainerNode*, const string &name, bool value) throw(Error);
+    static void          jsoncppNode_writeString       (ContainerNode*, const string &name, const string &value) throw(Error);
+    static void          jsoncppNode_writeStringVector (ContainerNode*, const string &name, const StringVector &value) throw(Error);
+    static ContainerNode jsoncppNode_writeNewContainer (ContainerNode*, const string &name) throw(Error);
+    static ContainerNode jsoncppNode_writeNewArray     (ContainerNode*, const string &name) throw(Error);
 
     static container_node_op jsoncpp_op = {
         &jsoncppNode_hasUnread,
@@ -204,7 +204,7 @@ namespace pjsettings
         return "";
     }
 
-    static double        jsoncppNode_readNumber(const ContainerNode *node, const string &name) throw(Error)
+    static void        jsoncppNode_readNumber(const ContainerNode *node, const string &name, double &value) throw(Error)
     {
         Json::Value &data = get_value(node);
         ArrayIndex arrayIndex = get_array_index(node);
@@ -212,16 +212,17 @@ namespace pjsettings
         {
             Json::Value &arrayElement = get_array_value(data, arrayIndex);
             selectNextArrayElement(node, arrayIndex);
-            return arrayElement.asDouble();
+            value = arrayElement.asDouble();
         }
         else
         {
             Json::Value &element = data[name];
-            return element.asDouble();
+            if (!element.isNull())
+                value = element.asDouble();
         }
     }
 
-    static bool          jsoncppNode_readBool(const ContainerNode *node, const string &name) throw(Error)
+    static void          jsoncppNode_readBool(const ContainerNode *node, const string &name, bool &value) throw(Error)
     {
         Json::Value &data = get_value(node);
         ArrayIndex arrayIndex = get_array_index(node);
@@ -229,16 +230,17 @@ namespace pjsettings
         {
             Json::Value &arrayElement = get_array_value(data, arrayIndex);
             selectNextArrayElement(node, arrayIndex);
-            return arrayElement.asBool();
+            value = arrayElement.asBool();
         }
         else
         {
             Json::Value &element = data[name];
-            return element.asBool();
+            if (!element.isNull())
+                value = element.asBool();
         }
     }
 
-    static string        jsoncppNode_readString(const ContainerNode *node, const string &name) throw(Error)
+    static void        jsoncppNode_readString(const ContainerNode *node, const string &name, string &value) throw(Error)
     {
         Json::Value &data = get_value(node);
         ArrayIndex arrayIndex = get_array_index(node);
@@ -246,16 +248,17 @@ namespace pjsettings
         {
             Json::Value &arrayElement = get_array_value(data, arrayIndex);
             selectNextArrayElement(node, arrayIndex);
-            return arrayElement.asString();
+            value = arrayElement.asString();
         }
         else
         {
             Json::Value &element = data[name];
-            return element.asString();
+            if (!element.isNull())
+                value = element.asString();
         }
     }
 
-    static StringVector  jsoncppNode_readStringVector(const ContainerNode *node, const string &name) throw(Error)
+    static void  jsoncppNode_readStringVector(const ContainerNode *node, const string &name, StringVector &value) throw(Error)
     {
         Json::Value &data = get_value(node);
         ArrayIndex arrayIndex = get_array_index(node);
@@ -271,13 +274,16 @@ namespace pjsettings
         }
 
         Json::Value &element = *stringVectorNode;
+        if (element.isNull() || !element.isArray())
+            return;
+
         StringVector result;
         for (int i = 0; i < element.size(); ++i)
         {
             Json::Value &item = element[i];
             result.push_back(item.asCString());
         }
-        return result;
+        value = result;
     }
 
     static ContainerNode jsoncppNode_readContainer(const ContainerNode *node, const string &name) throw(Error)
