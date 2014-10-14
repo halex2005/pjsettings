@@ -5,6 +5,23 @@ Platform | Linux | Windows
 ---------|-------|--------
 Build status | [![Build Status](https://travis-ci.org/halex2005/pjsettings.svg?branch=master)](https://travis-ci.org/halex2005/pjsettings) | [![Build status](https://ci.appveyor.com/api/projects/status/ehy5ody4geoirtgd)](https://ci.appveyor.com/project/halex2005/pjsettings)
 
+## modified-persistent-api branch
+
+**modified-persistent-api branch** of PJSettings has rewritten PJSIP persistent classes to support preserving default values on read.
+
+Main changes:
+
+- double as main type for readNumber() functions family
+- support for preserving default values on read when values not exists in confuguration (see `void readNumber(name, value)` functions)
+- `NODE_READ_*` macros will preserve default values
+- You can use this branch without linking with PJSIP libraries (all dependencies are in place).
+
+Restrictions:
+
+- You cannot use this branch to read PJSIP configuration classes such as pj::LogConfig and pj::EpConfig. This branch is designed to use without linking with PJSIP libraries, in projects that not uses PJSIP altogether.
+
+## PJSettings
+
 PJSettings is a small library that extends a PJSIP persistent document interfaces to support:
 
 - read/write xml document non-serially, based on [pugixml backend](http://pugixml.org/)
