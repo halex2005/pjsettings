@@ -3,7 +3,6 @@ skip_tags: true
 clone_folder: c:\projects\pjsettings
 environment:
   BOOST_ROOT: c:\Libraries\boost
-  PJSIP_ROOT: c:\projects\pjproject
   PJSETTINGS_ROOT: c:\projects\pjsettings
 platform:
   - x86
@@ -16,9 +15,6 @@ install:
   - if "%PLATFORM%" == "x86" set CMAKE_GENERATOR="Visual Studio 12"
   - if "%PLATFORM%" == "x64" set CMAKE_GENERATOR="Visual Studio 12 Win64"
   - if "%PLATFORM%" == "x86" set PLATFORM=Win32
-  - git clone https://github.com/halex2005/pjproject.git %PJSIP_ROOT%
-  - cd %PJSIP_ROOT%
-  - msbuild pjproject-v120.sln /t:libpjproject /p:Configuration=%Configuration%-Dynamic
   - mkdir "%PJSETTINGS_ROOT%\tmp"
   - cd "%PJSETTINGS_ROOT%\tmp" && cmake .. -G %CMAKE_GENERATOR%
   - dir "%PJSETTINGS_ROOT%\tmp"
