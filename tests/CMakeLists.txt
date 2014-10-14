@@ -29,7 +29,7 @@ add_executable(test-pjsettings
     test-config-jsoncpp.json
     test-config-pugixml.xml
 )
-target_link_libraries(test-pjsettings pjsettings ${Boost_LIBRARIES} ${PJSIP_STATIC_LIBRARIES})
+target_link_libraries(test-pjsettings pjsettings ${Boost_LIBRARIES})
 
 add_custom_command(
     TARGET test-pjsettings PRE_BUILD

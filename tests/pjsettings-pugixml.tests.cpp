@@ -1,7 +1,6 @@
 #include <boost/filesystem/operations.hpp>
 #include <catch/catch.hpp>
 #include <pjsettings-pugixml.h>
-#include <pjsua2/endpoint.hpp>
 #include <iostream>
 #include "SimpleClass.h"
 

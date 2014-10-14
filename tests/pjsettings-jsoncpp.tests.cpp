@@ -2,7 +2,6 @@
 #include <catch/catch.hpp>
 #include <iostream>
 #include <pjsettings-jsoncpp.h>
-#include <pjsua2/endpoint.hpp>
 #include "SimpleClass.h"
 
 using namespace Json;
