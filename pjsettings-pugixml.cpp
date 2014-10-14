@@ -18,9 +18,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include <stdexcept>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 #include "pjsettings-pugixml.h"
 
 using namespace pj;
@@ -32,13 +32,13 @@ namespace pjsettings
     /* Pugixml node operations */
     static bool          pugixmlNode_hasUnread(const ContainerNode*);
     static string        pugixmlNode_unreadName(const ContainerNode*n) throw(Error);
-    static float         pugixmlNode_readNumber(const ContainerNode*, const string&) throw(Error);
+    static double        pugixmlNode_readNumber(const ContainerNode*, const string&) throw(Error);
     static bool          pugixmlNode_readBool(const ContainerNode*, const string&) throw(Error);
     static string        pugixmlNode_readString(const ContainerNode*, const string&) throw(Error);
     static StringVector  pugixmlNode_readStringVector(const ContainerNode*, const string&) throw(Error);
     static ContainerNode pugixmlNode_readContainer(const ContainerNode*, const string &) throw(Error);
     static ContainerNode pugixmlNode_readArray(const ContainerNode*, const string &) throw(Error);
-    static void          pugixmlNode_writeNumber(ContainerNode*, const string &name, float num) throw(Error);
+    static void          pugixmlNode_writeNumber(ContainerNode*, const string &name, double num) throw(Error);
     static void          pugixmlNode_writeBool(ContainerNode*, const string &name, bool value) throw(Error);
     static void          pugixmlNode_writeString(ContainerNode*, const string &name, const string &value) throw(Error);
     static void          pugixmlNode_writeStringVector(ContainerNode*, const string &name, const StringVector &value) throw(Error);
@@ -171,12 +171,12 @@ namespace pjsettings
         }
         else
         {
-            pugi::xml_node element(data);
+           pugi::xml_node element(data);
             return element.name();
         }
     }
 
-    static float         pugixmlNode_readNumber(const ContainerNode *node, const string &name) throw(Error)
+    static double         pugixmlNode_readNumber(const ContainerNode *node, const string &name) throw(Error)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
         pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);
@@ -304,7 +304,7 @@ namespace pjsettings
         return childNode;
     }
 
-    static void          pugixmlNode_writeNumber(ContainerNode *node, const string &name, float num) throw(Error)
+    static void          pugixmlNode_writeNumber(ContainerNode *node, const string &name, double num) throw(Error)
     {
         pugi::xml_node_struct *data = static_cast<pugi::xml_node_struct *>(node->data.data1);
         pugi::xml_node_struct *arrayData = static_cast<pugi::xml_node_struct *>(node->data.data2);

@@ -34,13 +34,13 @@ namespace pjsettings
     /* Pugixml node operations */
     static bool          jsoncppNode_hasUnread(const ContainerNode*);
     static string        jsoncppNode_unreadName(const ContainerNode*n) throw(Error);
-    static float         jsoncppNode_readNumber(const ContainerNode*, const string&) throw(Error);
+    static double        jsoncppNode_readNumber(const ContainerNode*, const string&) throw(Error);
     static bool          jsoncppNode_readBool(const ContainerNode*, const string&) throw(Error);
     static string        jsoncppNode_readString(const ContainerNode*, const string&) throw(Error);
     static StringVector  jsoncppNode_readStringVector(const ContainerNode*, const string&) throw(Error);
     static ContainerNode jsoncppNode_readContainer(const ContainerNode*, const string &) throw(Error);
     static ContainerNode jsoncppNode_readArray(const ContainerNode*, const string &) throw(Error);
-    static void          jsoncppNode_writeNumber(ContainerNode*, const string &name, float num) throw(Error);
+    static void          jsoncppNode_writeNumber(ContainerNode*, const string &name, double um) throw(Error);
     static void          jsoncppNode_writeBool(ContainerNode*, const string &name, bool value) throw(Error);
     static void          jsoncppNode_writeString(ContainerNode*, const string &name, const string &value) throw(Error);
     static void          jsoncppNode_writeStringVector(ContainerNode*, const string &name, const StringVector &value) throw(Error);
@@ -204,7 +204,7 @@ namespace pjsettings
         return "";
     }
 
-    static float         jsoncppNode_readNumber(const ContainerNode *node, const string &name) throw(Error)
+    static double        jsoncppNode_readNumber(const ContainerNode *node, const string &name) throw(Error)
     {
         Json::Value &data = get_value(node);
         ArrayIndex arrayIndex = get_array_index(node);
@@ -336,7 +336,7 @@ namespace pjsettings
         return childNode;
     }
 
-    static void          jsoncppNode_writeNumber(ContainerNode *node, const string &name, float num) throw(Error)
+    static void          jsoncppNode_writeNumber(ContainerNode *node, const string &name, double num) throw(Error)
     {
         Value &data = get_value(node);
         ArrayIndex arrayIndex = get_array_index(node);

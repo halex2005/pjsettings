@@ -22,11 +22,8 @@
 #ifndef __PJSETTINGS_JSONCPP_H__
 #define __PJSETTINGS_JSONCPP_H__
 
-#ifndef PJSETTINGS_NOT_USE_PJSUA
-#include <pjsua2/persistent.hpp>
+#include "persistent.hpp"
 #include "json.h"
-
-#endif
 
 namespace pjsettings
 {

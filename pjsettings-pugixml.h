@@ -22,11 +22,8 @@
 #ifndef __PJSETTINGS_PUGIXML_H__
 #define __PJSETTINGS_PUGIXML_H__
 
-#ifndef PJSETTINGS_NOT_USE_PJSUA
-#include <pjsua2/persistent.hpp>
+#include "persistent.hpp"
 #include "pugixml.hpp"
-
-#endif
 
 namespace pjsettings
 {
@@ -42,8 +39,8 @@ namespace pjsettings
     private:
         void initRoot();
         pugi::xml_document _document;
-        unsigned int _flags;
         mutable pj::ContainerNode _rootNode;
+        unsigned int _flags;
     };
 
 }

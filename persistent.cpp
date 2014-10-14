@@ -37,7 +37,7 @@ int PersistentDocument::readInt(const string &name) const throw(Error)
     return (int)getRootContainer().readNumber(name);
 }
 
-float PersistentDocument::readNumber(const string &name) const throw(Error)
+double PersistentDocument::readNumber(const string &name) const throw(Error)
 {
     return getRootContainer().readNumber(name);
 }
@@ -76,7 +76,7 @@ ContainerNode PersistentDocument::readArray(const string &name) const
 }
 
 void PersistentDocument::writeNumber(const string &name,
-                     float num) throw(Error)
+                     double num) throw(Error)
 {
     getRootContainer().writeNumber(name, num);
 }
@@ -84,7 +84,7 @@ void PersistentDocument::writeNumber(const string &name,
 void PersistentDocument::writeInt(const string &name,
                   int num) throw(Error)
 {
-    getRootContainer().writeNumber(name, (float)num);
+    getRootContainer().writeNumber(name, (double)num);
 }
 
 void PersistentDocument::writeBool(const string &name,
@@ -140,7 +140,7 @@ int ContainerNode::readInt(const string &name) const throw(Error)
     return (int)op->readNumber(this, name);
 }
 
-float ContainerNode::readNumber(const string &name) const throw(Error)
+double ContainerNode::readNumber(const string &name) const throw(Error)
 {
     return op->readNumber(this, name);
 }
@@ -179,7 +179,7 @@ ContainerNode ContainerNode::readArray(const string &name) const
 }
 
 void ContainerNode::writeNumber(const string &name,
-                float num) throw(Error)
+                double num) throw(Error)
 {
     return op->writeNumber(this, name, num);
 }
@@ -187,7 +187,7 @@ void ContainerNode::writeNumber(const string &name,
 void ContainerNode::writeInt(const string &name,
                  int num) throw(Error)
 {
-    return op->writeNumber(this, name, (float)num);
+    return op->writeNumber(this, name, (double)num);
 }
 
 void ContainerNode::writeBool(const string &name,

@@ -16,17 +16,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef __PJSUA2_PERSISTENT_HPP__
-#define __PJSUA2_PERSISTENT_HPP__
+#ifndef __PJSETTINGS_PERSISTENT_HPP__
+#define __PJSETTINGS_PERSISTENT_HPP__
 
 /**
  * @file pjsua2/persistent.hpp
  * @brief PJSUA2 Persistent Services
  */
 #include "types.hpp"
-
-#include <string>
-#include <vector>
 
 /** PJSUA2 API is inside pj namespace */
 namespace pj
@@ -170,7 +167,7 @@ public:
     int         readInt(const string &name="") const throw(Error);
 
     /**
-     * Read a float value from the document and return the value.
+     * Read a double value from the document and return the value.
      * This will throw Error if the current element is not a number.
      * The read position will be advanced to the next element.
      *
@@ -180,7 +177,7 @@ public:
      *
      * @return      The value.
      */
-    float       readNumber(const string &name="") const throw(Error);
+    double       readNumber(const string &name="") const throw(Error);
 
     /**
      * Read a boolean value from the container and return the value.
@@ -265,7 +262,7 @@ public:
      * @param num   The value to be written.
      */
     void        writeNumber(const string &name,
-                            float num) throw(Error);
+                            double num) throw(Error);
 
     /**
      * Write a number value to the container.
@@ -368,7 +365,7 @@ struct container_node_internal_data
  *  - NODE_READ_BOOL(node,item)
  *  - NODE_READ_UNSIGNED(node,item)
  *  - NODE_READ_INT(node,item)
- *  - NODE_READ_FLOAT(node,item)
+ *  - NODE_READ_DOUBLE(node,item)
  *  - NODE_READ_NUM_T(node,type,item)
  *  - NODE_READ_STRING(node,item)
  *  - NODE_READ_STRINGV(node,item)
@@ -376,7 +373,7 @@ struct container_node_internal_data
  *  - NODE_WRITE_BOOL(node,item)
  *  - NODE_WRITE_UNSIGNED(node,item)
  *  - NODE_WRITE_INT(node,item)
- *  - NODE_WRITE_FLOAT(node,item)
+ *  - NODE_WRITE_DOUBLE(node,item)
  *  - NODE_WRITE_NUM_T(node,type,item)
  *  - NODE_WRITE_STRING(node,item)
  *  - NODE_WRITE_STRINGV(node,item)
@@ -442,7 +439,7 @@ public:
      *
      * @return      The value.
      */
-    float       readNumber(const string &name="") const throw(Error);
+    double       readNumber(const string &name="") const throw(Error);
 
     /**
      * Read a boolean value from the container and return the value.
@@ -527,7 +524,7 @@ public:
      * @param num   The value to be written.
      */
     void        writeNumber(const string &name,
-                            float num) throw(Error);
+                            double num) throw(Error);
 
     /**
      * Write a number value to the container.
@@ -612,13 +609,13 @@ struct container_node_op
 {
     bool            (*hasUnread)        (const ContainerNode*);
     string          (*unreadName)       (const ContainerNode*) throw(Error);
-    float           (*readNumber)       (const ContainerNode*, const string &name) throw(Error);
+    double           (*readNumber)       (const ContainerNode*, const string &name) throw(Error);
     bool            (*readBool)         (const ContainerNode*, const string &name) throw(Error);
     string          (*readString)       (const ContainerNode*, const string &name) throw(Error);
     StringVector    (*readStringVector) (const ContainerNode*, const string &name) throw(Error);
     ContainerNode   (*readContainer)    (const ContainerNode*, const string &name) throw(Error);
     ContainerNode   (*readArray)        (const ContainerNode*, const string &name) throw(Error);
-    void            (*writeNumber)      (ContainerNode*, const string &name, float value) throw(Error);
+    void            (*writeNumber)      (ContainerNode*, const string &name, double value) throw(Error);
     void            (*writeBool)        (ContainerNode*, const string &name, bool value) throw(Error);
     void            (*writeString)      (ContainerNode*, const string &name, const string &value) throw(Error);
     void            (*writeStringVector)(ContainerNode*, const string &name, const StringVector &value) throw(Error);
@@ -632,17 +629,17 @@ struct container_node_op
 #define NODE_READ_BOOL(node,item)      item = node.readBool(#item)
 #define NODE_READ_UNSIGNED(node,item)  item = (unsigned)node.readNumber(#item)
 #define NODE_READ_INT(node,item)       item = (int) node.readNumber(#item)
-#define NODE_READ_FLOAT(node,item)     item = node.readNumber(#item)
+#define NODE_READ_DOUBLE(node,item)     item = node.readNumber(#item)
 #define NODE_READ_NUM_T(node,T,item)   item = (T)(int)node.readNumber(#item)
 #define NODE_READ_STRING(node,item)    item = node.readString(#item)
 #define NODE_READ_STRINGV(node,item)   item = node.readStringVector(#item)
 #define NODE_READ_OBJ(node,item)       node.readObject(item)
 
 #define NODE_WRITE_BOOL(node,item)     node.writeBool(#item, item)
-#define NODE_WRITE_UNSIGNED(node,item) node.writeNumber(#item, (float)item)
-#define NODE_WRITE_INT(node,item)      node.writeNumber(#item, (float)item)
-#define NODE_WRITE_NUM_T(node,T,item)  node.writeNumber(#item, (float)item)
-#define NODE_WRITE_FLOAT(node,item)    node.writeNumber(#item, item)
+#define NODE_WRITE_UNSIGNED(node,item) node.writeNumber(#item, (double)item)
+#define NODE_WRITE_INT(node,item)      node.writeNumber(#item, (double)item)
+#define NODE_WRITE_NUM_T(node,T,item)  node.writeNumber(#item, (double)item)
+#define NODE_WRITE_DOUBLE(node,item)    node.writeNumber(#item, item)
 #define NODE_WRITE_STRING(node,item)   node.writeString(#item, item)
 #define NODE_WRITE_STRINGV(node,item)  node.writeStringVector(#item, item)
 #define NODE_WRITE_OBJ(node,item)      node.writeObject(item)
@@ -655,6 +652,4 @@ struct container_node_op
 
 } // namespace pj
 
-
-
-#endif  /* __PJSUA2_PERSISTENT_HPP__ */
+#endif  /* __PJSETTINGS_PERSISTENT_HPP__ */

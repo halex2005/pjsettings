@@ -61,7 +61,7 @@ SCENARIO("read json from string", "[jsoncpp]")
         SECTION("read double")
         {
             double doubleValue;
-            NODE_READ_FLOAT(node, doubleValue);
+            NODE_READ_DOUBLE(node, doubleValue);
             CHECK(2.5 == doubleValue);
         }
 
@@ -307,7 +307,7 @@ SCENARIO("jsoncpp to string", "[jsoncpp]")
         SECTION("write double")
         {
             double doubleValue = 2.5;
-            NODE_WRITE_FLOAT(node, doubleValue);
+            NODE_WRITE_DOUBLE(node, doubleValue);
             CHECK(contains_string(doc, "{\"doubleValue\":2.5}"));
         }
 

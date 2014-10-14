@@ -16,8 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef __PJSUA2_TYPES_HPP__
-#define __PJSUA2_TYPES_HPP__
+#ifndef __PJSETTINGS_TYPES_HPP__
+#define __PJSETTINGS_TYPES_HPP__
 
 #ifdef _MSC_VER
 #   pragma warning( disable : 4290 ) // exception spec ignored
@@ -345,4 +345,4 @@ inline string pj2Str(const pj_str_t &input_str)
 
 
 
-#endif	/* __PJSUA2_TYPES_HPP__ */
+#endif	/* __PJSETTINGS_TYPES_HPP__ */
