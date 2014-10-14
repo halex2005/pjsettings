@@ -52,8 +52,7 @@ string PersistentDocument::readString(const string &name) const throw(Error)
     return getRootContainer().readString(name);
 }
 
-StringVector PersistentDocument::readStringVector(const string &name) const
-                          throw(Error)
+StringVector PersistentDocument::readStringVector(const string &name) const throw(Error)
 {
     return getRootContainer().readStringVector(name);
 }
@@ -63,45 +62,37 @@ void PersistentDocument::readObject(PersistentObject &obj) const throw(Error)
     getRootContainer().readObject(obj);
 }
 
-ContainerNode PersistentDocument::readContainer(const string &name) const
-                            throw(Error)
+ContainerNode PersistentDocument::readContainer(const string &name) const throw(Error)
 {
     return getRootContainer().readContainer(name);
 }
 
-ContainerNode PersistentDocument::readArray(const string &name) const
-                        throw(Error)
+ContainerNode PersistentDocument::readArray(const string &name) const throw(Error)
 {
     return getRootContainer().readArray(name);
 }
 
-void PersistentDocument::writeNumber(const string &name,
-                     double num) throw(Error)
+void PersistentDocument::writeNumber(const string &name, double num) throw(Error)
 {
     getRootContainer().writeNumber(name, num);
 }
 
-void PersistentDocument::writeInt(const string &name,
-                  int num) throw(Error)
+void PersistentDocument::writeInt(const string &name, int num) throw(Error)
 {
     getRootContainer().writeNumber(name, (double)num);
 }
 
-void PersistentDocument::writeBool(const string &name,
-                   bool value) throw(Error)
+void PersistentDocument::writeBool(const string &name, bool value) throw(Error)
 {
     getRootContainer().writeBool(name, value);
 }
 
-void PersistentDocument::writeString(const string &name,
-                                     const string &value) throw(Error)
+void PersistentDocument::writeString(const string &name, const string &value) throw(Error)
 {
     getRootContainer().writeString(name, value);
 }
 
-void PersistentDocument::writeStringVector(const string &name,
-                                           const StringVector &value)
-                       throw(Error)
+void PersistentDocument::writeStringVector(const string &name, const StringVector &value) throw(Error)
 {
     getRootContainer().writeStringVector(name, value);
 }
@@ -111,14 +102,12 @@ void PersistentDocument::writeObject(const PersistentObject &obj) throw(Error)
     getRootContainer().writeObject(obj);
 }
 
-ContainerNode PersistentDocument::writeNewContainer(const string &name)
-                            throw(Error)
+ContainerNode PersistentDocument::writeNewContainer(const string &name) throw(Error)
 {
     return getRootContainer().writeNewContainer(name);
 }
 
-ContainerNode PersistentDocument::writeNewArray(const string &name)
-                            throw(Error)
+ContainerNode PersistentDocument::writeNewArray(const string &name) throw(Error)
 {
     return getRootContainer().writeNewArray(name);
 }
@@ -155,8 +144,7 @@ string ContainerNode::readString(const string &name) const throw(Error)
     return op->readString(this, name);
 }
 
-StringVector ContainerNode::readStringVector(const string &name) const
-                         throw(Error)
+StringVector ContainerNode::readStringVector(const string &name) const throw(Error)
 {
     return op->readStringVector(this, name);
 }
@@ -166,45 +154,37 @@ void ContainerNode::readObject(PersistentObject &obj) const throw(Error)
     obj.readObject(*this);
 }
 
-ContainerNode ContainerNode::readContainer(const string &name) const
-                       throw(Error)
+ContainerNode ContainerNode::readContainer(const string &name) const throw(Error)
 {
     return op->readContainer(this, name);
 }
 
-ContainerNode ContainerNode::readArray(const string &name) const
-                       throw(Error)
+ContainerNode ContainerNode::readArray(const string &name) const throw(Error)
 {
     return op->readArray(this, name);
 }
 
-void ContainerNode::writeNumber(const string &name,
-                double num) throw(Error)
+void ContainerNode::writeNumber(const string &name, double num) throw(Error)
 {
     return op->writeNumber(this, name, num);
 }
 
-void ContainerNode::writeInt(const string &name,
-                 int num) throw(Error)
+void ContainerNode::writeInt(const string &name, int num) throw(Error)
 {
     return op->writeNumber(this, name, (double)num);
 }
 
-void ContainerNode::writeBool(const string &name,
-                  bool value) throw(Error)
+void ContainerNode::writeBool(const string &name, bool value) throw(Error)
 {
     return op->writeBool(this, name, value);
 }
 
-void ContainerNode::writeString(const string &name,
-                const string &value) throw(Error)
+void ContainerNode::writeString(const string &name, const string &value) throw(Error)
 {
     return op->writeString(this, name, value);
 }
 
-void ContainerNode::writeStringVector(const string &name,
-                      const StringVector &value)
-                      throw(Error)
+void ContainerNode::writeStringVector(const string &name, const StringVector &value) throw(Error)
 {
     return op->writeStringVector(this, name, value);
 }
@@ -214,14 +194,12 @@ void ContainerNode::writeObject(const PersistentObject &obj) throw(Error)
     obj.writeObject(*this);
 }
 
-ContainerNode ContainerNode::writeNewContainer(const string &name)
-                           throw(Error)
+ContainerNode ContainerNode::writeNewContainer(const string &name) throw(Error)
 {
     return op->writeNewContainer(this, name);
 }
 
-ContainerNode ContainerNode::writeNewArray(const string &name)
-                       throw(Error)
+ContainerNode ContainerNode::writeNewArray(const string &name) throw(Error)
 {
     return op->writeNewArray(this, name);
 }

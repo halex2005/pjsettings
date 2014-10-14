@@ -216,8 +216,7 @@ public:
      *
      * @return      The value.
      */
-    StringVector    readStringVector(const string &name="") const
-                     throw(Error);
+    StringVector    readStringVector(const string &name="") const throw(Error);
 
     /**
      * Read the specified object from the container. This is equal to
@@ -238,8 +237,7 @@ public:
      *
      * @return      Container object.
      */
-    ContainerNode   readContainer(const string &name="") const
-                      throw(Error);
+    ContainerNode   readContainer(const string &name="") const throw(Error);
 
     /**
      * Read array container from the container. This will throw Error if the
@@ -252,8 +250,7 @@ public:
      *
      * @return      Container object.
      */
-    ContainerNode   readArray(const string &name="") const
-                  throw(Error);
+    ContainerNode   readArray(const string &name="") const throw(Error);
 
     /**
      * Write a number value to the container.
@@ -261,8 +258,7 @@ public:
      * @param name  The name for the value in the container.
      * @param num   The value to be written.
      */
-    void        writeNumber(const string &name,
-                            double num) throw(Error);
+    void        writeNumber(const string &name, double num) throw(Error);
 
     /**
      * Write a number value to the container.
@@ -270,8 +266,7 @@ public:
      * @param name  The name for the value in the container.
      * @param num   The value to be written.
      */
-    void        writeInt(const string &name,
-                         int num) throw(Error);
+    void        writeInt(const string &name, int num) throw(Error);
 
     /**
      * Write a boolean value to the container.
@@ -279,8 +274,7 @@ public:
      * @param name  The name for the value in the container.
      * @param value The value to be written.
      */
-    void        writeBool(const string &name,
-                          bool value) throw(Error);
+    void        writeBool(const string &name, bool value) throw(Error);
 
     /**
      * Write a string value to the container.
@@ -288,8 +282,7 @@ public:
      * @param name  The name for the value in the container.
      * @param value The value to be written.
      */
-    void        writeString(const string &name,
-                            const string &value) throw(Error);
+    void        writeString(const string &name, const string &value) throw(Error);
 
     /**
      * Write string vector to the container.
@@ -297,9 +290,7 @@ public:
      * @param name  The name for the value in the container.
      * @param arr   The vector to be written.
      */
-    void        writeStringVector(const string &name,
-                                  const StringVector &arr)
-                      throw(Error);
+    void        writeStringVector(const string &name, const StringVector &arr) throw(Error);
 
     /**
      * Write an object to the container. This is equal to calling
@@ -317,8 +308,7 @@ public:
      *
      * @return      A sub-container.
      */
-    ContainerNode   writeNewContainer(const string &name)
-                      throw(Error);
+    ContainerNode   writeNewContainer(const string &name) throw(Error);
 
     /**
      * Create and write an empty array node that can be used as parent
@@ -328,8 +318,7 @@ public:
      *
      * @return      A sub-container.
      */
-    ContainerNode   writeNewArray(const string &name)
-                      throw(Error);
+    ContainerNode   writeNewArray(const string &name) throw(Error);
 };
 
 
@@ -365,6 +354,7 @@ struct container_node_internal_data
  *  - NODE_READ_BOOL(node,item)
  *  - NODE_READ_UNSIGNED(node,item)
  *  - NODE_READ_INT(node,item)
+ *  - NODE_READ_FLOAT(node,item)
  *  - NODE_READ_DOUBLE(node,item)
  *  - NODE_READ_NUM_T(node,type,item)
  *  - NODE_READ_STRING(node,item)
@@ -373,6 +363,7 @@ struct container_node_internal_data
  *  - NODE_WRITE_BOOL(node,item)
  *  - NODE_WRITE_UNSIGNED(node,item)
  *  - NODE_WRITE_INT(node,item)
+ *  - NODE_WRITE_FLOAT(node,item)
  *  - NODE_WRITE_DOUBLE(node,item)
  *  - NODE_WRITE_NUM_T(node,type,item)
  *  - NODE_WRITE_STRING(node,item)
@@ -478,8 +469,7 @@ public:
      *
      * @return      The value.
      */
-    StringVector    readStringVector(const string &name="") const
-                     throw(Error);
+    StringVector    readStringVector(const string &name="") const throw(Error);
 
     /**
      * Read the specified object from the container. This is equal to
@@ -500,8 +490,7 @@ public:
      *
      * @return      Container object.
      */
-    ContainerNode   readContainer(const string &name="") const
-                      throw(Error);
+    ContainerNode   readContainer(const string &name="") const throw(Error);
 
     /**
      * Read array container from the container. This will throw Error if the
@@ -514,8 +503,7 @@ public:
      *
      * @return      Container object.
      */
-    ContainerNode   readArray(const string &name="") const
-                  throw(Error);
+    ContainerNode   readArray(const string &name="") const throw(Error);
 
     /**
      * Write a number value to the container.
@@ -523,8 +511,7 @@ public:
      * @param name  The name for the value in the container.
      * @param num   The value to be written.
      */
-    void        writeNumber(const string &name,
-                            double num) throw(Error);
+    void        writeNumber(const string &name, double num) throw(Error);
 
     /**
      * Write a number value to the container.
@@ -532,8 +519,7 @@ public:
      * @param name  The name for the value in the container.
      * @param num   The value to be written.
      */
-    void        writeInt(const string &name,
-                         int num) throw(Error);
+    void        writeInt(const string &name, int num) throw(Error);
 
     /**
      * Write a boolean value to the container.
@@ -541,8 +527,7 @@ public:
      * @param name  The name for the value in the container.
      * @param value The value to be written.
      */
-    void        writeBool(const string &name,
-                          bool value) throw(Error);
+    void        writeBool(const string &name, bool value) throw(Error);
 
     /**
      * Write a string value to the container.
@@ -550,8 +535,7 @@ public:
      * @param name  The name for the value in the container.
      * @param value The value to be written.
      */
-    void        writeString(const string &name,
-                            const string &value) throw(Error);
+    void        writeString(const string &name, const string &value) throw(Error);
 
     /**
      * Write string vector to the container.
@@ -559,9 +543,7 @@ public:
      * @param name  The name for the value in the container.
      * @param arr   The vector to be written.
      */
-    void        writeStringVector(const string &name,
-                                  const StringVector &arr)
-                      throw(Error);
+    void        writeStringVector(const string &name, const StringVector &arr) throw(Error);
 
     /**
      * Write an object to the container. This is equal to calling
@@ -579,8 +561,7 @@ public:
      *
      * @return      A sub-container.
      */
-    ContainerNode   writeNewContainer(const string &name)
-                      throw(Error);
+    ContainerNode   writeNewContainer(const string &name) throw(Error);
 
     /**
      * Create and write an empty array node that can be used as parent
@@ -590,8 +571,7 @@ public:
      *
      * @return      A sub-container.
      */
-    ContainerNode   writeNewArray(const string &name)
-                      throw(Error);
+    ContainerNode   writeNewArray(const string &name) throw(Error);
 
 public:
     /* internal data */
@@ -609,7 +589,7 @@ struct container_node_op
 {
     bool            (*hasUnread)        (const ContainerNode*);
     string          (*unreadName)       (const ContainerNode*) throw(Error);
-    double           (*readNumber)       (const ContainerNode*, const string &name) throw(Error);
+    double          (*readNumber)       (const ContainerNode*, const string &name) throw(Error);
     bool            (*readBool)         (const ContainerNode*, const string &name) throw(Error);
     string          (*readString)       (const ContainerNode*, const string &name) throw(Error);
     StringVector    (*readStringVector) (const ContainerNode*, const string &name) throw(Error);

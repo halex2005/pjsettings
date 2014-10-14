@@ -38,25 +38,25 @@ namespace pj
 /* ************************************************************************* */
 
 /** Signed 32bit integer. */
-typedef int     pj_int32_t;
+typedef int             pj_int32_t;
 
 /** Unsigned 32bit integer. */
 typedef unsigned int    pj_uint32_t;
 
 /** Signed 16bit integer. */
-typedef short       pj_int16_t;
+typedef short           pj_int16_t;
 
 /** Unsigned 16bit integer. */
 typedef unsigned short  pj_uint16_t;
 
 /** Signed 8bit integer. */
-typedef signed char pj_int8_t;
+typedef signed char     pj_int8_t;
 
 /** Unsigned 8bit integer. */
 typedef unsigned char   pj_uint8_t;
 
 /** Large unsigned integer. */
-typedef size_t      pj_size_t;
+typedef size_t          pj_size_t;
 
 /** Large signed integer. */
 #if defined(PJ_WIN64) && PJ_WIN64!=0
@@ -180,7 +180,7 @@ class Call;
 enum
 {
     /** Invalid ID, equal to PJSUA_INVALID_ID */
-    INVALID_ID	= -1,
+    INVALID_ID  = -1,
 
     /** Success, equal to PJ_SUCCESS */
     SUCCESS = 0
@@ -195,22 +195,22 @@ enum
 struct Error
 {
     /** The error code. */
-    pj_status_t	status;
+    pj_status_t status;
 
     /** The PJSUA API operation that throws the error. */
-    string	title;
+    string  title;
 
     /** The error message */
-    string	reason;
+    string  reason;
 
     /** The PJSUA source file that throws the error */
-    string	srcFile;
+    string  srcFile;
 
     /** The line number of PJSUA source file that throws the error */
-    int		srcLine;
+    int     srcLine;
 
     /** Build error string. */
-    string	info(bool multi_line=false) const;
+    string  info(bool multi_line=false) const;
 
     /** Default constructor */
     Error();
@@ -232,56 +232,56 @@ struct Error
  * Error utilities.
  */
 #if PJSUA2_ERROR_HAS_EXTRA_INFO
-#   define PJSUA2_RAISE_ERROR(status)		\
-	PJSUA2_RAISE_ERROR2(status, __FUNCTION__)
+#   define PJSUA2_RAISE_ERROR(status)       \
+    PJSUA2_RAISE_ERROR2(status, __FUNCTION__)
 
-#   define PJSUA2_RAISE_ERROR2(status,op)	\
-	PJSUA2_RAISE_ERROR3(status, op, string())
+#   define PJSUA2_RAISE_ERROR2(status,op)   \
+    PJSUA2_RAISE_ERROR3(status, op, string())
 
-#   define PJSUA2_RAISE_ERROR3(status,op,txt)	\
-	do { \
-	    Error err_ = Error(status, op, txt, __FILE__, __LINE__); \
-	    PJ_LOG(1,(THIS_FILE, "%s", err_.info().c_str())); \
-	    throw err_; \
-	} while (0)
+#   define PJSUA2_RAISE_ERROR3(status,op,txt)   \
+    do { \
+        Error err_ = Error(status, op, txt, __FILE__, __LINE__); \
+        PJ_LOG(1,(THIS_FILE, "%s", err_.info().c_str())); \
+        throw err_; \
+    } while (0)
 
 #else
     /** Raise Error exception */
-#   define PJSUA2_RAISE_ERROR(status)		\
-	PJSUA2_RAISE_ERROR2(status, string())
+#   define PJSUA2_RAISE_ERROR(status)       \
+    PJSUA2_RAISE_ERROR2(status, string())
 
 /** Raise Error exception */
-#   define PJSUA2_RAISE_ERROR2(status,op)	\
-	PJSUA2_RAISE_ERROR3(status, op, string())
+#   define PJSUA2_RAISE_ERROR2(status,op)   \
+    PJSUA2_RAISE_ERROR3(status, op, string())
 
 /** Raise Error exception */
-#   define PJSUA2_RAISE_ERROR3(status,op,txt)	\
-	do { \
-	    Error err_ = Error(status, op, txt, string(), 0); \
-	    PJ_LOG(1,(THIS_FILE, "%s", err_.info().c_str())); \
-	    throw err_; \
-	} while (0)
+#   define PJSUA2_RAISE_ERROR3(status,op,txt)   \
+    do { \
+        Error err_ = Error(status, op, txt, string(), 0); \
+        PJ_LOG(1,(THIS_FILE, "%s", err_.info().c_str())); \
+        throw err_; \
+    } while (0)
 
 #endif
 
 /** Raise Error exception if the expression fails */
-#define PJSUA2_CHECK_RAISE_ERROR2(status, op)	\
-	do { \
-	    if (status != PJ_SUCCESS) { \
-		PJSUA2_RAISE_ERROR2(status, op); \
-	    } \
-	} while (0)
+#define PJSUA2_CHECK_RAISE_ERROR2(status, op)   \
+    do { \
+        if (status != PJ_SUCCESS) { \
+        PJSUA2_RAISE_ERROR2(status, op); \
+        } \
+    } while (0)
 
 /** Raise Error exception if the status fails */
-#define PJSUA2_CHECK_RAISE_ERROR(status)	\
-	PJSUA2_CHECK_RAISE_ERROR2(status, "")
+#define PJSUA2_CHECK_RAISE_ERROR(status)    \
+    PJSUA2_CHECK_RAISE_ERROR2(status, "")
 
 /** Raise Error exception if the expression fails */
-#define PJSUA2_CHECK_EXPR(expr)			\
-	do { \
-	    pj_status_t the_status = expr; 	\
-	    PJSUA2_CHECK_RAISE_ERROR2(the_status, #expr); \
-	} while (0)
+#define PJSUA2_CHECK_EXPR(expr)         \
+    do { \
+        pj_status_t the_status = expr;  \
+        PJSUA2_CHECK_RAISE_ERROR2(the_status, #expr); \
+    } while (0)
 
 //////////////////////////////////////////////////////////////////////////////
 /**
@@ -290,26 +290,26 @@ struct Error
 struct Version
 {
     /** Major number */
-    int		major;
+    int     major;
 
     /** Minor number */
-    int		minor;
+    int     minor;
 
     /** Additional revision number */
-    int		rev;
+    int     rev;
 
     /** Version suffix (e.g. "-svn") */
-    string	suffix;
+    string  suffix;
 
     /** The full version info (e.g. "2.1.0-svn") */
-    string	full;
+    string  full;
 
     /**
      * PJLIB version number as three bytes with the following format:
      * 0xMMIIRR00, where MM: major number, II: minor number, RR: revision
      * number, 00: always zero for now.
      */
-    unsigned	numeric;
+    unsigned    numeric;
 };
 
 }
@@ -343,6 +343,4 @@ inline string pj2Str(const pj_str_t &input_str)
 
 } // namespace pj
 
-
-
-#endif	/* __PJSETTINGS_TYPES_HPP__ */
+#endif  /* __PJSETTINGS_TYPES_HPP__ */
