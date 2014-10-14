@@ -24,6 +24,10 @@ using namespace std;
 
 #define THIS_FILE   "types.cpp"
 
+#if defined(_MSC_VER)
+#   define snprintf _snprintf
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 
 Error::Error()
