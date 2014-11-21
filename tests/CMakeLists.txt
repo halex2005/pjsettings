@@ -38,3 +38,9 @@ add_custom_command(
 add_custom_command(
     TARGET test-pjsettings PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/test-config-jsoncpp.json $<TARGET_FILE_DIR:test-pjsettings>)
+
+add_test(
+    NAME test-pjsettings
+    COMMAND test-pjsettings --reporter junit --out test-pjsettings.junit.xml
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:test-pjsettings>
+)

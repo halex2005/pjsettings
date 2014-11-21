@@ -1,5 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
+project(pjsettings)
+enable_testing()
 include_directories(.)
 
 if (NOT PJSIP_FOUND)
