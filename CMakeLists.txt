@@ -1,7 +1,10 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-project(pjsettings)
-enable_testing()
+option(PJSETTINGS_USE_EXTERNAL_JSONCPP OFF)
+option(PJSETTINGS_USE_EXTERNAL_PUGIXML OFF)
+option(PJSETTINGS_NO_TESTS OFF)
+
+project(pjsettings LANGUAGES CXX)
 include_directories(.)
 
 if (NOT PJSIP_FOUND)
@@ -49,20 +52,32 @@ endif()
 set(pjsettings-json
     pjsettings-jsoncpp.h
     pjsettings-jsoncpp.cpp
-    json.h
-    json-forwards.h
-    jsoncpp.cpp
 )
+if (NOT PJSETTINGS_USE_EXTERNAL_JSONCPP)
+    list(APPEND pjsettings-json
+        json.h
+        json-forwards.h
+        jsoncpp.cpp
+    )
+endif()
 source_group(jsoncpp FILES ${pjsettings-json})
 
 set(pjsettings-pugixml
     pjsettings-pugixml.h
     pjsettings-pugixml.cpp
-    pugixml.hpp
-    pugixml.cpp
 )
+if (NOT PJSETTINGS_USE_EXTERNAL_PUGIXML)
+    list(APPEND pjsettings-pugixml
+        pugiconfig.hpp
+        pugixml.hpp
+        pugixml.cpp
+    )
+endif()
 source_group(pugixml FILES ${pjsettings-pugixml})
 
 add_library(pjsettings ${pjsettings-json} ${pjsettings-pugixml})
 
-add_subdirectory(tests)
+if (NOT PJSETTINGS_NO_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
