@@ -20,7 +20,7 @@ install:
   - if "%PLATFORM%" == "Win32" set BOOST_DEFINITIONS=-DBOOST_ROOT="%BOOST_ROOT%" -DBOOST_LIBRARYDIR="%BOOST_ROOT%/lib32-msvc-12.0"
   - if "%PLATFORM%" == "x64"   set BOOST_DEFINITIONS=-DBOOST_ROOT="%BOOST_ROOT%" -DBOOST_LIBRARYDIR="%BOOST_ROOT%/lib64-msvc-12.0"
   - git clone https://github.com/halex2005/pjproject.git %PJSIP_SOURCES_ROOT%
-  - mkdir "%PJSIP_SOURCES_ROOT\tmp%"
+  - mkdir "%PJSIP_SOURCES_ROOT%\tmp"
   - cd "%PJSIP_SOURCES_ROOT%\tmp"
   - cmake .. -G %CMAKE_GENERATOR% -DCMAKE_INSTALL_PREFIX="%INSTALL_PREFIX%"
   - msbuild pjproject.sln
