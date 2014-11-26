@@ -34,7 +34,7 @@ if (NOT PJSIP_FOUND)
         set (PJSIP_LIBRARY_DIR ${PJSIP_ROOT_DIR}/lib)
         link_directories(${PJSIP_LIBRARY_DIR})
 
-        set (PJSIP_LIBRARIES "pjlib;pjlib_util;pjmedia;pjmedia_audiodev;pjmedia_codec;pjmedia_videodev;pjnath;pjsip_core;pjsip_simple;pjsip_ua;pjsua_lib;pjsua2_lib;baseclasses;g7221codec;gsmcodec;ilbccodec;milenage;portaudio;resample;speex;srtp")
+        set (PJSIP_LIBRARIES "libpjproject")
         set (PJSIP_PLATFORM_LIBRARIES "Ws2_32;ole32;wsock32;dsound")
         set (PJSIP_STATIC_LIBRARIES ${PJSIP_LIBRARIES} ${PJSIP_PLATFORM_LIBRARIES})
     endif()
