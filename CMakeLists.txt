@@ -4,7 +4,7 @@ option(PJSETTINGS_USE_EXTERNAL_JSONCPP OFF)
 option(PJSETTINGS_USE_EXTERNAL_PUGIXML OFF)
 option(PJSETTINGS_NO_TESTS OFF)
 
-project(pjsettings LANGUAGES CXX)
+project(pjsettings)
 include_directories(.)
 
 if (NOT PJSIP_FOUND)
