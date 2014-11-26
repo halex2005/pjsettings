@@ -28,24 +28,15 @@ if (NOT PJSIP_FOUND)
 
         set (PJSIP_ROOT_DIR $ENV{PJSIP_ROOT})
 
-        find_path(PJSIP_PJLIB_INCLUDE_DIR NAMES "pjlib.h" PATHS "${PJSIP_ROOT_DIR}/pjlib/include")
-        find_path(PJSIP_PJLIB_UTIL_INCLUDE_DIR NAMES "pjlib-util.h" PATHS "${PJSIP_ROOT_DIR}/pjlib-util/include")
-        find_path(PJSIP_PJMEDIA_INCLUDE_DIR NAMES "pjmedia.h" PATHS "${PJSIP_ROOT_DIR}/pjmedia/include")
-        find_path(PJSIP_PJNATH_INCLUDE_DIR NAMES "pjnath.h" PATHS "${PJSIP_ROOT_DIR}/pjnath/include")
-        find_path(PJSIP_PJSIP_INCLUDE_DIR NAMES "pjsip.h" PATHS "${PJSIP_ROOT_DIR}/pjsip/include")
-        set (PJSIP_INCLUDE_DIR
-            ${PJSIP_PJLIB_INCLUDE_DIR}
-            ${PJSIP_PJLIB_UTIL_INCLUDE_DIR}
-            ${PJSIP_PJMEDIA_INCLUDE_DIR}
-            ${PJSIP_PJNATH_INCLUDE_DIR}
-            ${PJSIP_PJSIP_INCLUDE_DIR}
-        )
+        set (PJSIP_INCLUDE_DIR ${PJSIP_ROOT_DIR}/include)
         include_directories(${PJSIP_INCLUDE_DIR})
 
-        set (PJSIP_LIBRARIES "libpjproject-\$(Platform)-\$(PlatformToolset)-\$(Configuration)-Dynamic.lib")
-        set (PJSIP_STATIC_LIBRARIES ${PJSIP_LIBRARIES} Ws2_32.lib)
-        set (PJSIP_LIBRARY_DIR "${PJSIP_ROOT_DIR}/lib")
+        set (PJSIP_LIBRARY_DIR ${PJSIP_ROOT_DIR}/lib)
         link_directories(${PJSIP_LIBRARY_DIR})
+
+        set (PJSIP_LIBRARIES "pjlib;pjlib_util;pjmedia;pjmedia_audiodev;pjmedia_codec;pjmedia_videodev;pjnath;pjsip_core;pjsip_simple;pjsip_ua;pjsua_lib;pjsua2_lib;baseclasses;g7221codec;gsmcodec;ilbccodec;milenage;portaudio;resample;speex;srtp")
+        set (PJSIP_PLATFORM_LIBRARIES "Ws2_32;ole32;wsock32;dsound")
+        set (PJSIP_STATIC_LIBRARIES ${PJSIP_LIBRARIES} ${PJSIP_PLATFORM_LIBRARIES})
     endif()
 endif()
 
