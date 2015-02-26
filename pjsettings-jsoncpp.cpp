@@ -84,6 +84,10 @@ namespace pjsettings
     void JsonCppDocument::loadFile(const std::string &filename) throw(pj::Error)
     {
         std::ifstream input(filename.c_str(), std::ifstream::binary);
+        if (!input)
+        {
+            throw Error(1, "there is no file exists", filename, __FILE__, __LINE__);
+        }
         Json::Reader reader;
         bool parsedSuccessfully = reader.parse(input, _document);
         if (!parsedSuccessfully)
