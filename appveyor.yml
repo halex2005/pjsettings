@@ -6,7 +6,7 @@ environment:
   INSTALL_PREFIX: c:\Libraries
   BOOST_ROOT: c:\Libraries\boost
   PJSIP_SOURCES_ROOT: c:\projects\pjproject
-  PJSIP_ROOT: c:\Libraries
+  PJSIP_ROOT: c:\Libraries\pjproject
   PJSETTINGS_ROOT: c:\projects\pjsettings
 platform:
   - Win32
